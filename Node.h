@@ -18,7 +18,7 @@ class Node{
             ROAD
         };
 
-        /// functions that access to the 
+        /// ABC functions that access to the building/road information 
         virtual Node::NodeType get_node_type() const = 0;
         virtual int get_cost() const = 0;
         virtual std::string get_long_information() const = 0;
