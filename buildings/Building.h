@@ -6,10 +6,11 @@
 #define BUILDING_H
 
 #include <string>
+#include "../Node.h"
 
 class City;
 
-class Building {
+class Building: public Node {
 public:
     enum class Type {
         CLINIC = 1,

@@ -56,6 +56,14 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
                     }
                 }
             }
+            else if(type == 7 || type == 8){
+                if(static_cast<Road::Type>(type) == 7){
+                    grid[x][y] = new Street{*this};
+                }
+                else{
+                    grid[x][y] = new Avenue{*this};
+                }
+            }
             else {
                 grid[x][y] = nullptr;
             }
@@ -71,28 +79,28 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
                 if (x > 0) {
                     Building *neighbor = get_at(x - 1, y);
                     if (neighbor) {
-                        building->register_neighboring_building(neighbor);
+                        building->set_west_pointer(neighbor);
                     }
                 }
 
                 if (x < grid_size - 1) {
                     Building *neighbor = get_at(x + 1, y);
                     if (neighbor) {
-                        building->register_neighboring_building(neighbor);
+                        building->set_east_pointer(neighbor);
                     }
                 }
 
                 if (y > 0) {
                     Building *neighbor = get_at(x, y - 1);
                     if (neighbor) {
-                        building->register_neighboring_building(neighbor);
+                        building->set_south_pointer(neighbor);
                     }
                 }
 
                 if (y < grid_size - 1) {
                     Building *neighbor = get_at(x, y + 1);
                     if (neighbor) {
-                        building->register_neighboring_building(neighbor);
+                        building->set_north_pointer(neighbor);
                     }
                 }
             }
@@ -296,32 +304,32 @@ bool City::construct_at(Building::Type type, const Coordinates &coordinates) {
     if (coordinates.x > 0) {
         Building *neighbor = get_at(coordinates.x - 1, coordinates.y);
         if (neighbor) {
-            neighbor->register_neighboring_building(building);
-            building->register_neighboring_building(neighbor);
+            neighbor->set_east_pointer(building);
+            building->set_west_pointer(neighbor);
         }
     }
 
     if (coordinates.x < grid_size - 1) {
         Building *neighbor = get_at(coordinates.x + 1, coordinates.y);
         if (neighbor) {
-            neighbor->register_neighboring_building(building);
-            building->register_neighboring_building(neighbor);
+            neighbor->set_west_pointer(building);
+            building->set_east_pointer(neighbor);
         }
     }
 
     if (coordinates.y > 0) {
         Building *neighbor = get_at(coordinates.x, coordinates.y - 1);
         if (neighbor) {
-            neighbor->register_neighboring_building(building);
-            building->register_neighboring_building(neighbor);
+            neighbor->set_north_pointer(building);
+            building->set_south_pointer(neighbor);
         }
     }
 
     if (coordinates.y < grid_size - 1) {
         Building *neighbor = get_at(coordinates.x, coordinates.y + 1);
         if (neighbor) {
-            neighbor->register_neighboring_building(building);
-            building->register_neighboring_building(neighbor);
+            neighbor->set_south_pointer(building);
+            building->set_north_pointer(neighbor);
         }
     }
 
@@ -342,32 +350,32 @@ bool City::demolish_at(const Coordinates &coordinates) {
     if (coordinates.x > 0) {
         Building *neighbor = get_at(coordinates.x - 1, coordinates.y);
         if (neighbor) {
-            neighbor->deregister_neighboring_building(building);
-            building->deregister_neighboring_building(neighbor);
+            neighbor->set_east_pointer(nullptr);
+            // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.x < grid_size - 1) {
         Building *neighbor = get_at(coordinates.x + 1, coordinates.y);
         if (neighbor) {
-            neighbor->deregister_neighboring_building(building);
-            building->deregister_neighboring_building(neighbor);
+            neighbor->set_west_pointer(nullptr);
+            // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.y > 0) {
         Building *neighbor = get_at(coordinates.x, coordinates.y - 1);
         if (neighbor) {
-            neighbor->deregister_neighboring_building(building);
-            building->deregister_neighboring_building(neighbor);
+            neighbor->set_north_pointer(nullptr);
+            // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.y < grid_size - 1) {
         Building *neighbor = get_at(coordinates.x, coordinates.y + 1);
         if (neighbor) {
-            neighbor->deregister_neighboring_building(building);
-            building->deregister_neighboring_building(neighbor);
+            neighbor->set_south_pointer(nullptr);
+            // building->deregister_neighboring_building(neighbor);
         }
     }
 
