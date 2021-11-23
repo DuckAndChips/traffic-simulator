@@ -12,7 +12,18 @@ class Node{
         Node* west;
         Node* north;
 
-    public:
+    public:  
+        enum class NodeType {
+            BUILDING,
+            ROAD
+        };
+
+        /// functions that access to the 
+        virtual Node::NodeType get_node_type() const = 0;
+        virtual int get_cost() const = 0;
+        virtual std::string get_long_information() const = 0;
+        virtual std::string get_short_information() const = 0;
+    
         /// functions that access the four neighbouring building/road object
         Node* get_east_pointer() const;
         Node* get_south_pointer() const;
@@ -31,10 +42,12 @@ class Node{
         bool is_west_empty() const;
         bool is_north_empty() const;
 
-        /// functions that return whether the neighouring pointers are road object or not
+        /// functions that return whether the itself and neighouring pointers are road object or not
         virtual bool is_east_road() const;
         virtual bool is_south_road() const;
         virtual bool is_west_road() const;
         virtual bool is_north_road() const;
+        
 
+    
 };
