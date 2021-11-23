@@ -45,6 +45,9 @@ public:
     virtual int get_population_growth() const;
     virtual int get_population_growth_rate_contribution() const;
     virtual void increase_population(int population);
+    
+    virtual int update_work_trips();
+    virtual int update_health__trips();
 
 //     bool register_neighboring_building(Building *building);
 //     bool deregister_neighboring_building(Building *building);
