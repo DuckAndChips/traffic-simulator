@@ -11,6 +11,9 @@
 #include "buildings/GoldMine.h"
 #include "buildings/House.h"
 #include "buildings/Apartment.h"
+#include "buildings/Street.h"
+#include "buildings/Avenue.h"
+
 #include <string>
 #include <ostream>
 
