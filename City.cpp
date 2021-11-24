@@ -254,6 +254,10 @@ bool City::can_construct(Building::Type type) const {
         case Building::Type::APARTMENT:
             cost = Apartment::cost;
             break;
+        case Building::Type::STREET:
+            cost = Street::cost;
+        case Building::Type::AVENUE:
+            cost = Avenue::cost;
     }
 
     return (cost <= budget);
@@ -294,6 +298,12 @@ bool City::construct_at(Building::Type type, const Coordinates &coordinates) {
             break;
         case Building::Type::APARTMENT:
             building = new Apartment{*this, 0};
+            break;
+        case Building::Type::STREET:
+            building = new Street(*this);
+            break;
+        case Building::Type::AVENUE:
+            building = new Avenue(*this);
             break;
     }
 

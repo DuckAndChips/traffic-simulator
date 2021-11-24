@@ -4,7 +4,7 @@
 
 #include "Building.h"
 
-class Road:Building{
+class Road: public Building{
     private:
         int traffic_flow;   /// the current traffic flow in this road object
         double travel_time; /// the current traffic time when a car pass through this road object
