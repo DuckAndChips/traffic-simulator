@@ -17,7 +17,7 @@ public:
     };
 
     enum class OverlayButton {
-        NORMAL, TYPE, NEIGHBOR
+        NORMAL, TYPE, NEIGHBOR, ROAD
     };
 
     enum class SideMenuStatus {
@@ -34,7 +34,21 @@ public:
     OverlayButton get_selected_overlay_button();
     SideMenuStatus get_side_menu_status();
     void set_side_menu_status(SideMenuStatus status);
-
+private slots:
+    void on_btn_next_clicked();
+    void on_btn_overlay_neighbor_clicked();
+    void on_btn_overlay_normal_clicked();
+    void on_btn_overlay_type_clicked();
+    void on_btn_overlay_road_clicked();
+    void on_btn_save_game_clicked();
+    void on_btn_apartment_clicked();
+    void on_btn_clinic_clicked();
+    void on_btn_destruct_clicked();
+    void on_btn_gold_clicked();
+    void on_btn_hospital_clicked();
+    void on_btn_house_clicked();
+    void on_btn_navigate_clicked();
+    void on_btn_silver_clicked();
 private:
     // Initialization functions, called in constructor
     void initialize_overlay_buttons();
@@ -42,7 +56,6 @@ private:
 
     void on_overlay_button_clicked(OverlayButton button);
     void on_side_menu_button_clicked(SideMenuButton button);
-
 
     void main_loop();
 
@@ -57,22 +70,5 @@ private:
     SideMenuStatus side_menu_status;
 
     friend class GameWidget;
-private slots:
-    void on_btn_next_clicked();
-    void on_btn_save_game_clicked();
-
-    void on_btn_overlay_normal_clicked();
-    void on_btn_overlay_neighbor_clicked();
-    void on_btn_overlay_type_clicked();
-
-    void on_btn_clinic_clicked();
-    void on_btn_hospital_clicked();
-    void on_btn_gold_clicked();
-    void on_btn_silver_clicked();
-    void on_btn_house_clicked();
-    void on_btn_apartment_clicked();
-    void on_btn_navigate_clicked();
-    void on_btn_destruct_clicked();
-
 };
 #endif // MAINWINDOW_H

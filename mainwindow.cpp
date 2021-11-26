@@ -33,6 +33,7 @@ MainWindow::MainWindow(City *const city, QWidget *parent) :
     ui->side_menu->setMaximumWidth(0);
 }
 
+
 void MainWindow::initialize_side_menu_buttons() {
     ui->btn_clinic->setText(ui->btn_clinic->text() + " $" + QString::number(Clinic::cost));
     ui->btn_hospital->setText(ui->btn_hospital->text() + " $" + QString::number(Hospital::cost));
@@ -44,21 +45,21 @@ void MainWindow::initialize_side_menu_buttons() {
     // START OF YOUR IMPLEMENTATION
     ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
+    ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
     // END OF YOUR IMPLEMENTATION
 }
 
 void MainWindow::initialize_overlay_buttons() {
     // START OF YOUR IMPLEMENTATION
     ui->btn_overlay_normal->setStyleSheet(BTN_SELECTED_STYLE);
-    ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
-    selected_overlay_button = OverlayButton::NORMAL;
+    ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_overlay_road->setStyleSheet(BTN_RELEASED_STYLE);
     // END OF YOUR IMPLEMENTATION
 }
 
@@ -87,83 +88,125 @@ void MainWindow::set_side_menu_status(SideMenuStatus status) {
 
 void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
     // START OF YOUR IMPLEMENTATION
-    ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
-    switch (button) {
-        case SideMenuButton::CLINIC:
-            if(city->can_construct(Building::Type::CLINIC) == true){
-                ui->btn_clinic->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::CLINIC;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+    switch(button){
+    case SideMenuButton::APARTMENT:
+        if(city->get_budget() < 300){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::HOSPITAL:
-            if(city->can_construct(Building::Type::HOSPITAL) == true){
-                ui->btn_hospital->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::HOSPITAL;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::APARTMENT;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::CLINIC:
+        if(city->get_budget() < 50){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::GOLD_MINE:
-            if(city->can_construct(Building::Type::GOLD_MINE) == true){
-                ui->btn_gold->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::GOLD_MINE;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::CLINIC;
+        ui->btn_clinic->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::DEMOLISH:
+        MainWindow::selected_side_menu_button = SideMenuButton::DEMOLISH;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_SELECTED_STYLE);
+        break;
+    case SideMenuButton::GOLD_MINE:
+        if(city->get_budget() < 400){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::SILVER_MINE:
-            if(city->can_construct(Building::Type::SILVER_MINE) == true){
-                ui->btn_silver->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::GOLD_MINE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::HOSPITAL:
+        if(city->get_budget() < 500){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::HOUSE:
-            if(city->can_construct(Building::Type::HOUSE) == true){
-                ui->btn_house->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::HOUSE;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::HOSPITAL;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::HOUSE:
+        if(city->get_budget() < 50){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::APARTMENT:
-            if(city->can_construct(Building::Type::APARTMENT) == true){
-                ui->btn_apartment->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::APARTMENT;
-            }
-            else{
-                ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-                MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            }
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::HOUSE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::NAVIGATE:
+        MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::SILVER_MINE:
+        if(city->get_budget() < 50){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
-        case SideMenuButton::NAVIGATE:
-            ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
-            MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
-            break;
-        case SideMenuButton::DEMOLISH:
-            ui->btn_destruct->setStyleSheet(BTN_SELECTED_STYLE);
-            MainWindow::selected_side_menu_button = SideMenuButton::DEMOLISH;
-            break;
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
     }
 
     // END OF YOUR IMPLEMENTATION
@@ -171,25 +214,39 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
 
 void MainWindow::on_overlay_button_clicked(OverlayButton button) {
     // START OF YOUR IMPLEMENTATION
-    ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
-    ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
-    switch (button) {
-        case OverlayButton::NORMAL:
-            ui->btn_overlay_normal->setStyleSheet(BTN_SELECTED_STYLE);
-            selected_overlay_button = OverlayButton::NORMAL;
-            break;
-        case OverlayButton::NEIGHBOR:
-            ui->btn_overlay_neighbor->setStyleSheet(BTN_SELECTED_STYLE);
-            selected_overlay_button = OverlayButton::NEIGHBOR;
-            break;
-        case OverlayButton::TYPE:
-            ui->btn_overlay_type->setStyleSheet(BTN_SELECTED_STYLE);
-            selected_overlay_button = OverlayButton::TYPE;
-            break;
+    //ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
+    //ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
+    //ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
+    switch (button){
+    case OverlayButton::ROAD:
+        ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_road->setStyleSheet(BTN_SELECTED_STYLE);
+        break;
+    case OverlayButton::NEIGHBOR:
+        ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_neighbor->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_road->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case OverlayButton::NORMAL:
+        ui->btn_overlay_normal->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_type->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_road->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case OverlayButton::TYPE:
+        ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_neighbor->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_overlay_type->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_overlay_road->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
     }
+
     // END OF YOUR IMPLEMENTATION
 }
+
 
 // This is called 50 times per second
 void MainWindow::main_loop() {
@@ -199,23 +256,24 @@ void MainWindow::main_loop() {
         case SideMenuStatus::HIDDEN_TO_VISIBLE:
             ui->side_menu->setMaximumWidth(400);
             // START OF YOUR IMPLEMENTATION
-                if(ui->side_menu_move->x() > 0){
-                    ui->side_menu_move->move(ui->side_menu_move->x()-10,ui->side_menu_move->y());
-                }
-                else{
-                    MainWindow::side_menu_status = SideMenuStatus::VISIBLE;
-                }
+            MainWindow::ui->side_menu_move->move(MainWindow::ui->side_menu_move->x()-10,MainWindow::ui->side_menu_move->y());
+            //MainWindow::ui->side_menu_move->move(QPoint(-10,0) + pos());   // appear instantly
+            if (MainWindow::ui->side_menu_move->x() <= 0){
+                side_menu_status = SideMenuStatus::VISIBLE;
+
+            }
             // END OF YOUR IMPLEMENTATION
             break;
         case SideMenuStatus::VISIBLE:
             break;
         case SideMenuStatus::VISIBLE_TO_HIDDEN:
             // START OF YOUR IMPLEMENTATION
-            if(ui->side_menu_move->x() < 400){
-                ui->side_menu_move->move(ui->side_menu_move->x()+10,ui->side_menu_move->y());
-            }
-            else{
-                MainWindow::side_menu_status = SideMenuStatus::HIDDEN;
+
+            // MOVEEEE TO LEFT
+            MainWindow::ui->side_menu_move->move(MainWindow::ui->side_menu_move->x()+10,MainWindow::ui->side_menu_move->y());
+            //MainWindow::ui->side_menu_move->move(QPoint(10,0)+ pos());   //appear instantly
+            if (MainWindow::ui->side_menu_move->x() >= 400){
+                side_menu_status = SideMenuStatus::HIDDEN;
                 ui->side_menu->setMaximumWidth(0);
             }
             // END OF YOUR IMPLEMENTATION
@@ -227,46 +285,56 @@ void MainWindow::main_loop() {
     ui->widget->loop();
 }
 
+
+
 void MainWindow::on_btn_next_clicked(){
     city->move_to_next_turn();
 }
-void MainWindow::on_btn_save_game_clicked(){
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Save file"));
-    if(fileName != ""){
-        city->save(fileName.toStdString());
-    }
+void MainWindow::on_btn_overlay_neighbor_clicked(){
+    on_overlay_button_clicked(OverlayButton::NEIGHBOR);
+    MainWindow::selected_overlay_button = OverlayButton::NEIGHBOR;
 }
 void MainWindow::on_btn_overlay_normal_clicked(){
-    MainWindow::on_overlay_button_clicked(OverlayButton::NORMAL);
-}
-void MainWindow::on_btn_overlay_neighbor_clicked(){
-    MainWindow::on_overlay_button_clicked(OverlayButton::NEIGHBOR);
+    on_overlay_button_clicked(OverlayButton::NORMAL);
+    MainWindow::selected_overlay_button = OverlayButton::NORMAL;
 }
 void MainWindow::on_btn_overlay_type_clicked(){
-    MainWindow::on_overlay_button_clicked(OverlayButton::TYPE);
+    on_overlay_button_clicked(OverlayButton::TYPE);
+    MainWindow::selected_overlay_button = OverlayButton::TYPE;
+}
+void MainWindow::on_btn_overlay_road_clicked(){
+    on_overlay_button_clicked(OverlayButton::ROAD);
+    MainWindow::selected_overlay_button = OverlayButton::ROAD;
+}
+void MainWindow::on_btn_save_game_clicked(){
+    QString filename = QFileDialog::getSaveFileName(this,tr("Save File"),"/home",tr("text files (*.txt)"));
+    if(!filename.isEmpty()&& !filename.isNull()){
+        std::string filenamestr = filename.toStdString();
+        city->save(filenamestr);
+    }
 }
 
+void MainWindow::on_btn_apartment_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::APARTMENT);
+}
 void MainWindow::on_btn_clinic_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::CLINIC);
 }
-void MainWindow::on_btn_hospital_clicked(){
-    MainWindow::on_side_menu_button_clicked(SideMenuButton::HOSPITAL);
+void MainWindow::on_btn_destruct_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::DEMOLISH);
 }
 void MainWindow::on_btn_gold_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::GOLD_MINE);
 }
-void MainWindow::on_btn_silver_clicked(){
-    MainWindow::on_side_menu_button_clicked(SideMenuButton::SILVER_MINE);
+void MainWindow::on_btn_hospital_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::HOSPITAL);
 }
 void MainWindow::on_btn_house_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::HOUSE);
 }
-void MainWindow::on_btn_apartment_clicked(){
-    MainWindow::on_side_menu_button_clicked(SideMenuButton::APARTMENT);
-}
 void MainWindow::on_btn_navigate_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
 }
-void MainWindow::on_btn_destruct_clicked(){
-    MainWindow::on_side_menu_button_clicked(SideMenuButton::DEMOLISH);
+void MainWindow::on_btn_silver_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::SILVER_MINE);;
 }
