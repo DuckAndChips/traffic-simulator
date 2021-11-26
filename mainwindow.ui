@@ -151,6 +151,25 @@ background-image: url(:/resources/images/stripes.png);
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="btn_overlay_road">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Road Overlay</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -525,7 +544,7 @@ background-image: url(:/resources/images/stripes.png);
              </property>
              <property name="icon">
               <iconset resource="images.qrc">
-               <normaloff>:/resources/images/road_2_W_E.png</normaloff>:/resources/images/road_2_W_E.png</iconset>
+               <normaloff>:/resources/images/road_3_E_S_W.png</normaloff>:/resources/images/road_3_E_S_W.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -557,7 +576,7 @@ background-image: url(:/resources/images/stripes.png);
              </property>
              <property name="icon">
               <iconset resource="images.qrc">
-               <normaloff>:/resources/images/hospital.png</normaloff>:/resources/images/hospital.png</iconset>
+               <normaloff>:/resources/images/road_4_N_E_S_W.png</normaloff>:/resources/images/road_4_N_E_S_W.png</iconset>
              </property>
              <property name="iconSize">
               <size>
