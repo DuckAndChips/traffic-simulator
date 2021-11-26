@@ -1,3 +1,19 @@
+#include "buildings/Clinic.h"
+#include "buildings/Hospital.h"
+#include "buildings/SilverMine.h"
+#include "buildings/GoldMine.h"
+#include "buildings/House.h"
+#include "buildings/Apartment.h"
+
+/**
+ * The following code should be incorperatred into the city's class, probably
+ */ 
+
+
+vector<Residential*> all_residential_buildings;
+vector<Revenue*> all_revenue_buildings;
+vector<Health*> all_health_buildings;
+
 
 /**
  * The following code should remained here
@@ -11,38 +27,59 @@ using namespace std;
 
 #include "City.h"
 #include "Node.h"
-#include "buildings/Clinic.h"
-#include "buildings/Hospital.h"
-#include "buildings/SilverMine.h"
-#include "buildings/GoldMine.h"
-#include "buildings/House.h"
-#include "buildings/Apartment.h"
+#include "road/Road.h"
 
-class Traffic_Model {
+
+class Trip_Generation {
+    
+    public:
+        int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& paths);
+        static const int max_path{999};
+};
+
+
+
+/**
+ * WARNING
+ * This class is designed to handle Road* instead of Node*
+ * DO NOT PASS IN ANY VECTOR OF Node* TO THE OBJECTS OF THIS CLASS
+ */
+class Trip_Assignment {
+    
     private:
-        std::vector<Node*> origin;
-        std::vector<Node*> destination;
+
+        std::vector<Road*> origin;
+        std::vector<Road*> destination;
         std::vector<std::vector<int>> OD_Matrix;
         City &city;
     public:
+
+        /// The incremental portion that used in trip assignment
+        static const int incremental_amount{1};        
+
+        /// constructors and functions that setup data members
+        explicit Trip_Assignment();
+        explicit Trip_Assignment(std::vector<Road*> origin, std::vector<Road*> destination, std::vector<std::vector<int>> OD_Matrix);
+        void set_Traffic_Model(std::vector<Road*> origin, std::vector<Road*> destination, std::vector<std::vector<int>> OD_Matrix);
+
+        /// Main functions used for trip assigment
+        void trip_assignment_main();
+
+        /// Remaining are some helper functions that needed for trip assignment 
         
-        explicit Traffic_Model();
-        explicit Traffic_Model(std::vector<Node*> origin, std::vector<Node*> destination, std::vector<std::vector<int>> OD_Matrix);
-        void set_Traffic_Model(std::vector<Node*> origin, std::vector<Node*> destination, std::vector<std::vector<int>> OD_Matrix);
-        void set_Traffic_Model(int** testing2Darray, int num_origin, int num_destination);
+        /// This function is used for checking whether the origin, destination, OD_matrix are probably set in correct size
+        /// return true when there is an inconsistency in the size of them or they are empty 
+        bool size_checking() const;
 
-        void trip_assignment();
+        /// This function is used to return a vector of Road* vector that records all possible paths from start_pt to end_pt
+        std::vector<std::vector<Road*>> get_all_paths(Road* start_pt, Road* end_pt);
+        bool get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths); /// an overloading function used for recursion 
 
-        /// used for checking whether the origin, destination, OD_matrix are probably set
-        /// return true whenever there is an inconsistency in the size of them or they are empty 
-        bool error_checking() const;
-        /// return true when the paths does not go from starting point to ending point
-        bool error_checking(Node* start_pt, const Node* end_pt, const std::vector<std::vector<Node::Direction>> &paths) const;
+        /// This function load each incremental flows to the road paths with shortest travel time
+        void load_traffic(std::vector<std::vector<Road*>> &paths);
 
-        /// remaining are some helper functions that needed for trip assignment 
-        std::vector<std::vector<Node::Direction>> get_all_paths(Node* start_pt, Node* end_pt); 
-        void load_traffic(Node* start_pt, const std::vector<std::vector<Node::Direction>> &paths);
-        double get_travel_time(Node* start_pt, const std::vector<Node::Direction> &path);
+        /// This function returns the travel time of a given road path
+        double get_travel_time(std::vector<Road*> &path);
 };
 
 
@@ -50,15 +87,5 @@ class Traffic_Model {
 
 
 
-
-
-/**
- * The following code should be incorperatred into the city's class, probably
- */ 
-
-
-vector<Residential*> all_residential_buildings;
-vector<Revenue*> all_revenue_buildings;
-vector<Health*> all_health_buildings;
 
 
