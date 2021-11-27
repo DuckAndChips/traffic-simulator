@@ -22,6 +22,10 @@ int Apartment::get_max_population() const {
 string Apartment::get_long_information() const {
     ostringstream out;
     out << APARTMENT_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << APARTMENT_1_1 << get_population() << endl;
     out << APARTMENT_2_1 << get_max_population() << endl;
     out << APARTMENT_3_1 << endl;
@@ -35,6 +39,10 @@ string Apartment::get_long_information() const {
 string Apartment::get_short_information() const {
     ostringstream out;
     out << APARTMENT_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << APARTMENT_1_1 << get_population() << endl;
     out << APARTMENT_2_1 << get_max_population() << endl;
     out << APARTMENT_4_1 << get_population_growth_rate_contribution() << endl;

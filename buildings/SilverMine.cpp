@@ -23,6 +23,10 @@ int SilverMine::get_revenue() const {
 string SilverMine::get_long_information() const {
     ostringstream out;
     out << SILVER_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << SILVER_1_1 << get_revenue() << endl;
     out << SILVER_2_1;
 
@@ -32,6 +36,10 @@ string SilverMine::get_long_information() const {
 string SilverMine::get_short_information() const {
     ostringstream out;
     out << SILVER_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << SILVER_1_1 << get_revenue();
 
     return out.str();

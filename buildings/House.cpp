@@ -22,6 +22,10 @@ int House::get_max_population() const {
 std::string House::get_long_information() const {
     ostringstream out;
     out << HOUSE_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << HOUSE_1_1 << get_population() << endl;
     out << HOUSE_2_1 << get_max_population() << endl;
     out << HOUSE_3_1 << endl;
@@ -35,6 +39,10 @@ std::string House::get_long_information() const {
 string House::get_short_information() const {
     ostringstream out;
     out << HOUSE_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << HOUSE_1_1 << get_population() << endl;
     out << HOUSE_2_1 << get_max_population() << endl;
     out << HOUSE_4_1 << get_population_growth_rate_contribution() << endl;

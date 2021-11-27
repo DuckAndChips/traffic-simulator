@@ -23,6 +23,10 @@ int GoldMine::get_revenue() const {
 string GoldMine::get_long_information() const {
     ostringstream out;
     out << GOLD_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << GOLD_1_1 << get_revenue() << endl;
     out << GOLD_2_1;
 
@@ -31,6 +35,10 @@ string GoldMine::get_long_information() const {
 
 string GoldMine::get_short_information() const {
     ostringstream out;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << GOLD_HEADER << endl;
     out << GOLD_1_1 << get_revenue();
 

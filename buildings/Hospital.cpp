@@ -22,6 +22,10 @@ int Hospital::get_population_growth_rate_contribution() const {
 string Hospital::get_long_information() const {
     ostringstream out;
     out << HOSPITAL_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << HOSPITAL_1_1 << get_population_growth_rate_contribution() << endl;
     out << HOSPITAL_2_1;
 
@@ -31,6 +35,10 @@ string Hospital::get_long_information() const {
 string Hospital::get_short_information() const {
     ostringstream out;
     out << HOSPITAL_HEADER << endl;
+    if(!is_neighbor_road(Node::Direction::EAST) && !is_neighbor_road(Node::Direction::NORTH) && 
+       !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
+           out << NO_ROAD_WARNING << endl;
+    }
     out << HOSPITAL_1_1 << get_population_growth_rate_contribution();
 
     return out.str();
