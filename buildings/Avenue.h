@@ -5,7 +5,7 @@
 class Avenue: public Road {
     public:
         static const int cost{200};
-        static const double max_traffic_flow{1000};
+        static constexpr double max_traffic_flow{1000};
 
         // constructor
         explicit Avenue(City &city);

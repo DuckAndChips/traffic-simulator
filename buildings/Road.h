@@ -2,6 +2,9 @@
  * This class is used to handle the road object in the game SimpleCity
 */
 
+#ifndef ROAD_H
+#define ROAD_H
+
 #include "Node.h"
 
 class Road: public Node{
@@ -26,10 +29,12 @@ class Road: public Node{
         void traffic_flow_incremental(int flow);
 
         /// regression parameters
-        static const double free_flow_travel_time{10.0};
-        static const double alpha{0.15};
-        static const double beta{4.0};
+        static constexpr double free_flow_travel_time{10.0};
+        static constexpr double alpha{0.15};
+        static constexpr double beta{4.0};
 
 
         
 };
+
+#endif // ROAD_H

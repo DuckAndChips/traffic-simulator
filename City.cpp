@@ -30,26 +30,30 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
 
             if (type >= 1 && type <= 8) {
                 switch (static_cast<Node::Type>(type)) {
-                    case Node::Type::CLINIC:
+                    case Node::Type::CLINIC: {
                         Clinic* c = new Clinic{*this};
                         grid[x][y] = c;
                         all_health_buildings.push_back(c);
                         break;
-                    case Node::Type::HOSPITAL:
+                    }
+                    case Node::Type::HOSPITAL: {
                         Hospital* hp = new Hospital{*this};
                         grid[x][y] = hp;
                         all_health_buildings.push_back(hp);
                         break;
-                    case Node::Type::SILVER_MINE:
+                    }
+                    case Node::Type::SILVER_MINE: {
                         SilverMine* sm = new SilverMine{*this};
                         grid[x][y] = sm;
                         all_revenue_buildings.push_back(sm);
                         break;
-                    case Node::Type::GOLD_MINE:
+                    }
+                    case Node::Type::GOLD_MINE: {
                         GoldMine* gm = new GoldMine{*this};
                         grid[x][y] = gm;
                         all_revenue_buildings.push_back(gm);
                         break;
+                    }
                     case Node::Type::HOUSE: {
                         int population;
                         input >> population;
@@ -295,42 +299,50 @@ bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
 
     Node *building;
     switch (type) {
-        case Node::Type::CLINIC:
+        case Node::Type::CLINIC: {
             Clinic* c = new Clinic{*this};
             all_health_buildings.push_back(c);
             building = c;                           /// potential source of error here 
             break;
-        case Node::Type::HOSPITAL:
+        }
+        case Node::Type::HOSPITAL: {
             Hospital* hp = new Hospital{*this};
             building = hp;
             all_health_buildings.push_back(hp);
             break;
-        case Node::Type::SILVER_MINE:
+        }
+        case Node::Type::SILVER_MINE: {
             SilverMine* sm = new SilverMine{*this};
             building = sm;
             all_revenue_buildings.push_back(sm);
             break;
-        case Node::Type::GOLD_MINE:
+        }
+        case Node::Type::GOLD_MINE: {
             GoldMine* gm = new GoldMine{*this};
             building = gm;
             all_revenue_buildings.push_back(gm);
             break;
-        case Node::Type::HOUSE:
+        }
+        case Node::Type::HOUSE: {
             House* h = new House{*this, 0};
             building = h;
             all_residential_buildings.push_back(h);
             break;
-        case Node::Type::APARTMENT:
+        }
+        case Node::Type::APARTMENT: {
             Apartment* ap = new Apartment{*this, 0};
             building = ap;
             all_residential_buildings.push_back(ap);
             break;
-        case Node::Type::STREET:
+        }
+        case Node::Type::STREET: {
             building = new Street(*this);
             break;
-        case Node::Type::AVENUE:
+        }
+        case Node::Type::AVENUE: {
             building = new Avenue(*this);
             break;
+        }
     }
 
     grid[coordinates.x][coordinates.y] = building;
@@ -384,18 +396,21 @@ bool City::demolish_at(const Coordinates &coordinates) {
     Node *building = grid[coordinates.x][coordinates.y];
     switch (building->get_category())
     {
-    case Node::Category::HEALTH:
+    case Node::Category::HEALTH: {
         vector<Health*>::iterator h = find(all_health_buildings.begin(),all_health_buildings.end(),building); /// potential source of error
         all_health_buildings.erase(h);
         break;
-    case Node::Category::RESIDENTIAL:
+    }
+    case Node::Category::RESIDENTIAL: {
         vector<Residential*>::iterator p = find(all_residential_buildings.begin(),all_residential_buildings.end(),building); /// potential source of error
         all_residential_buildings.erase(p);
         break;
-    case Node::Category::REVENUE:
+    }
+    case Node::Category::REVENUE: {
         vector<Revenue*>::iterator r = find(all_revenue_buildings.begin(),all_revenue_buildings.end(),building); /// potential source of error
         all_revenue_buildings.erase(r);
         break;
+    }
     default:
         break;
     }
