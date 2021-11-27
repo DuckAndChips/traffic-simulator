@@ -95,7 +95,7 @@ void GameWidget::mouseReleaseEvent(QMouseEvent* event) {
             } else if (event->button() == Qt::MouseButton::LeftButton) {
                 // If the selected button are buildings
                 if (button_selected != MainWindow::SideMenuButton::DEMOLISH && city->is_empty_at(x, y)) {
-                    city->construct_at(static_cast<Building::Type>(button_selected), x, y);
+                    city->construct_at(static_cast<Node::Type>(button_selected), x, y);
 
                     // Trick to jump back to navigation if player does not have enough budget for the building
                     main_window->on_side_menu_button_clicked(button_selected);
@@ -208,21 +208,21 @@ void GameWidget::drawPixmap(QPainter& paint, int x, int y, int w, int h, const Q
 }
 
 // Helper function
-int contains_type(Building* b1, Building* b2) {
+int contains_type(Node* b1, Node* b2) {
     if (b1 == nullptr || b2 == nullptr) {
         return -2;
     }
 
-    Building::Category t1 = b1->get_category();
-    Building::Category t2 = b2->get_category();
+    Node::Category t1 = b1->get_category();
+    Node::Category t2 = b2->get_category();
 
-    if (t1 == Building::Category::RESIDENTIAL) {
-        return (b2->get_type() == Building::Type::GOLD_MINE) ? 0 : 1;
+    if (t1 == Node::Category::RESIDENTIAL) {
+        return (b2->get_type() == Node::Type::GOLD_MINE) ? 0 : 1;
     }
-    if (t2 == Building::Category::RESIDENTIAL) {
-        return (b1->get_type() == Building::Type::GOLD_MINE) ? 0 : 1;
+    if (t2 == Node::Category::RESIDENTIAL) {
+        return (b1->get_type() == Node::Type::GOLD_MINE) ? 0 : 1;
     }
-    if (t1 == t2 && t2 == Building::Category::HEALTH) {
+    if (t1 == t2 && t2 == Node::Category::HEALTH) {
         return -1;
     }
 
@@ -265,7 +265,7 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         case MainWindow::OverlayButton::NORMAL:
             break;
         case MainWindow::OverlayButton::ROAD:{
-        for (int x = 0; x < grid_size; x++) {
+        /* for (int x = 0; x < grid_size; x++) {
             for (int y = 0; y < grid_size; y++) {
                 if (city->get_at(x, y)->get_category() == Node::Type::Road) { // Actual condition : Act on Road Type cell
                 //if (!city->is_empty_at(x, y)){  // For testing : This will act on cell with buildings
@@ -286,7 +286,7 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                     fillRect(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100, brush);
                 }
             }
-        }
+        } */
         break;
     }
 
@@ -297,13 +297,13 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                     if (!city->is_empty_at(x, y)) {
                         QBrush brush;
                         switch (city->get_at(x, y)->get_category()) {
-                            case Building::Category::RESIDENTIAL:
+                            case Node::Category::RESIDENTIAL:
                                 brush.setColor(QColor::fromRgbF(0, 0, 1, 0.8f));
                                 break;
-                            case Building::Category::REVENUE:
+                            case Node::Category::REVENUE:
                                 brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
                                 break;
-                            case Building::Category::HEALTH:
+                            case Node::Category::HEALTH:
                                 brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
                                 break;
                         }

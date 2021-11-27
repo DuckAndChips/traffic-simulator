@@ -14,9 +14,9 @@ MenuWindow::MenuWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Scale label logo pixmap
-    const QPixmap *p = ui->label_logo->pixmap();
+    const QPixmap p = ui->label_logo->pixmap();
     const int SCALE = 4;
-    ui->label_logo->setPixmap(p->scaled(p->width() * SCALE, p->height() * SCALE));
+    ui->label_logo->setPixmap(p.scaled(p.width() * SCALE, p.height() * SCALE));
 
     // Set pixmap for increase and decrease size buttons
     QPixmap increase {":/resources/images/next.png"};

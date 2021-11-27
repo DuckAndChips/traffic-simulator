@@ -387,5 +387,12 @@ void MainWindow::on_btn_navigate_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
 }
 void MainWindow::on_btn_silver_clicked(){
-    MainWindow::on_side_menu_button_clicked(SideMenuButton::SILVER_MINE);;
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::SILVER_MINE);
 }
+void MainWindow::on_btn_street_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::STREET);
+}
+void MainWindow::on_btn_avenue_clicked(){
+    MainWindow::on_side_menu_button_clicked(SideMenuButton::AVENUE);
+}
+
