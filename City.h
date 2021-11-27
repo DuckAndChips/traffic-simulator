@@ -13,12 +13,12 @@
 #include "buildings/Apartment.h"
 #include "buildings/Street.h"
 #include "buildings/Avenue.h"
-#include "trip_distribution.h"
 
 #include <string>
 #include <ostream>
 #include <vector>
 #include <algorithm>
+using namespace std;
 
 class City {
     friend class Trip_distribution;
@@ -101,10 +101,10 @@ private:
     vector<Health*> all_health_buildings;
 
     /// regression coefficients used in computing the formula used in the traffic models
-    float home_work_beta_0 = 0.8;
-    float home_work_beta_1 = 0.001;
-    float home_health_beta_0 = 0.1;
-    float home_health_beta_1 = 0.00025;
+    float home_work_beta_0 = 0.8f;
+    float home_work_beta_1 = 0.001f;
+    float home_health_beta_0 = 0.1f;
+    float home_health_beta_1 = 0.00025f;
 };
 
 #endif // CITY_H
