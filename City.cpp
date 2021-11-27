@@ -4,9 +4,9 @@
 using namespace std;
 
 City::City(int size): grid_size(size), budget(150), turn(1) {
-    grid = new Building **[size];
+    grid = new Node **[size];
     for (int x = 0; x < size; x++) {
-        grid[x] = new Building *[size];
+        grid[x] = new Node *[size];
         for (int y = 0; y < size; y++) {
             grid[x][y] = nullptr;
         }
@@ -21,49 +21,61 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
     input >> budget;
     input >> turn;
 
-    grid = new Building **[grid_size];
+    grid = new Node **[grid_size];
     for (int x = 0; x < grid_size; x++) {
-        grid[x] = new Building *[grid_size];
+        grid[x] = new Node *[grid_size];
         for (int y = 0; y < grid_size; y++) {
             int type;
             input >> type;
 
-            if (type >= 1 && type <= 6) {
-                switch (static_cast<Building::Type>(type)) {
-                    case Building::Type::CLINIC:
-                        grid[x][y] = new Clinic{*this};
+            if (type >= 1 && type <= 8) {
+                switch (static_cast<Node::Type>(type)) {
+                    case Node::Type::CLINIC:
+                        Clinic* c = new Clinic{*this};
+                        grid[x][y] = c;
+                        all_health_buildings.push_back(c);
                         break;
-                    case Building::Type::HOSPITAL:
-                        grid[x][y] = new Hospital{*this};
+                    case Node::Type::HOSPITAL:
+                        Hospital* hp = new Hospital{*this};
+                        grid[x][y] = hp;
+                        all_health_buildings.push_back(hp);
                         break;
-                    case Building::Type::SILVER_MINE:
-                        grid[x][y] = new SilverMine{*this};
+                    case Node::Type::SILVER_MINE:
+                        SilverMine* sm = new SilverMine{*this};
+                        grid[x][y] = sm;
+                        all_revenue_buildings.push_back(sm);
                         break;
-                    case Building::Type::GOLD_MINE:
-                        grid[x][y] = new GoldMine{*this};
+                    case Node::Type::GOLD_MINE:
+                        GoldMine* gm = new GoldMine{*this};
+                        grid[x][y] = gm;
+                        all_revenue_buildings.push_back(gm);
                         break;
-                    case Building::Type::HOUSE: {
+                    case Node::Type::HOUSE: {
                         int population;
                         input >> population;
-                        grid[x][y] = new House{*this, population};
+                        House* h = new House{*this, population};
+                        grid[x][y] = h;
+                        all_residential_buildings.push_back(h);
                         break;
                     }
-                    case Building::Type::APARTMENT: {
+                    case Node::Type::APARTMENT: {
                         int population;
                         input >> population;
-                        grid[x][y] = new Apartment{*this, population};
+                        Apartment* ap = new Apartment{*this, population};
+                        grid[x][y] = ap;
+                        all_residential_buildings.push_back(ap);
+                        break;
+                    }
+                    case Node::Type::STREET: {
+                        grid[x][y] = new Street{*this};
+                        break;
+                    }
+                    case Node::Type::AVENUE: {
+                        grid[x][y] = new Avenue{*this};
                         break;
                     }
                 }
-            }
-            else if(type == 7 || type == 8){
-                if(static_cast<Road::Type>(type) == 7){
-                    grid[x][y] = new Street{*this};
-                }
-                else{
-                    grid[x][y] = new Avenue{*this};
-                }
-            }
+            }  
             else {
                 grid[x][y] = nullptr;
             }
@@ -74,33 +86,33 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
 
     for (int x = 0; x < grid_size; ++x) {
         for (int y = 0; y < grid_size; ++y) {
-            Building *building = grid[x][y];
+            Node* building = grid[x][y];
             if (building) {
                 if (x > 0) {
-                    Building *neighbor = get_at(x - 1, y);
+                    Node *neighbor = get_at(x - 1, y);
                     if (neighbor) {
-                        building->set_west_pointer(neighbor);
+                        building->set_neighboring_node(Node::Direction::WEST,neighbor);
                     }
                 }
 
                 if (x < grid_size - 1) {
-                    Building *neighbor = get_at(x + 1, y);
+                    Node *neighbor = get_at(x + 1, y);
                     if (neighbor) {
-                        building->set_east_pointer(neighbor);
+                        building->set_neighboring_node(Node::Direction::EAST,neighbor);
                     }
                 }
 
                 if (y > 0) {
-                    Building *neighbor = get_at(x, y - 1);
+                    Node *neighbor = get_at(x, y - 1);
                     if (neighbor) {
-                        building->set_south_pointer(neighbor);
+                        building->set_neighboring_node(Node::Direction::SOUTH,neighbor);
                     }
                 }
 
                 if (y < grid_size - 1) {
-                    Building *neighbor = get_at(x, y + 1);
+                    Node *neighbor = get_at(x, y + 1);
                     if (neighbor) {
-                        building->set_north_pointer(neighbor);
+                        building->set_neighboring_node(Node::Direction::NORTH,neighbor);
                     }
                 }
             }
@@ -131,7 +143,7 @@ void City::save(const string &filename) const {
                 output << 0 << endl;
             } else {
                 output << static_cast<int>(grid[x][y]->get_type());
-                if (grid[x][y]->get_category() == Building::Category::RESIDENTIAL) {
+                if (grid[x][y]->get_category() == Node::Category::RESIDENTIAL) {
                     output << " " << grid[x][y]->get_population();
                 }
                 output << endl;
@@ -215,7 +227,7 @@ int City::get_population_growth_rate() const {
     return population_growth_rate;
 }
 
-Building* City::get_at(const Coordinates &coordinates) const {
+Node* City::get_at(const City::Coordinates &coordinates) const {
     if (coordinates.x < 0 || coordinates.x >= grid_size)
         return nullptr;
     if (coordinates.y < 0 || coordinates.y >= grid_size)
@@ -224,7 +236,7 @@ Building* City::get_at(const Coordinates &coordinates) const {
     return grid[coordinates.x][coordinates.y];
 }
 
-bool City::is_empty_at(const Coordinates &coordinates) const {
+bool City::is_empty_at(const City::Coordinates &coordinates) const {
     if (coordinates.x < 0 || coordinates.x >= grid_size)
         return false;
     if (coordinates.y < 0 || coordinates.y >= grid_size)
@@ -233,33 +245,39 @@ bool City::is_empty_at(const Coordinates &coordinates) const {
     return get_at(coordinates) == nullptr;
 }
 
-bool City::can_construct(Building::Type type) const {
+bool City::can_construct(Node::Type type) const {
     int cost;
     switch (type) {
-        case Building::Type::CLINIC:
+        case Node::Type::CLINIC:
             cost = Clinic::cost;
             break;
-        case Building::Type::HOSPITAL:
+        case Node::Type::HOSPITAL:
             cost = Hospital::cost;
             break;
-        case Building::Type::SILVER_MINE:
+        case Node::Type::SILVER_MINE:
             cost = SilverMine::cost;
             break;
-        case Building::Type::GOLD_MINE:
+        case Node::Type::GOLD_MINE:
             cost = GoldMine::cost;
             break;
-        case Building::Type::HOUSE:
+        case Node::Type::HOUSE:
             cost = House::cost;
             break;
-        case Building::Type::APARTMENT:
+        case Node::Type::APARTMENT:
             cost = Apartment::cost;
+            break;
+        case Node::Type::STREET:
+            cost = Street::cost;
+            break;
+        case Node::Type::AVENUE:
+            cost = Avenue::cost;
             break;
     }
 
     return (cost <= budget);
 }
 
-bool City::can_construct(Building::Type type, const Coordinates &coordinates) const {
+bool City::can_construct(Node::Type type, const City::Coordinates &coordinates) const {
     if (coordinates.x < 0 || coordinates.x >= grid_size)
         return false;
     if (coordinates.y < 0 || coordinates.y >= grid_size)
@@ -271,29 +289,47 @@ bool City::can_construct(Building::Type type, const Coordinates &coordinates) co
     return can_construct(type);
 }
 
-bool City::construct_at(Building::Type type, const Coordinates &coordinates) {
+bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
     if (!can_construct(type, coordinates.x, coordinates.y))
         return false;
 
-    Building *building;
+    Node *building;
     switch (type) {
-        case Building::Type::CLINIC:
-            building = new Clinic{*this};
+        case Node::Type::CLINIC:
+            Clinic* c = new Clinic{*this};
+            all_health_buildings.push_back(c);
+            building = c;                           /// potential source of error here 
             break;
-        case Building::Type::HOSPITAL:
-            building = new Hospital{*this};
+        case Node::Type::HOSPITAL:
+            Hospital* hp = new Hospital{*this};
+            building = hp;
+            all_health_buildings.push_back(hp);
             break;
-        case Building::Type::SILVER_MINE:
-            building = new SilverMine{*this};
+        case Node::Type::SILVER_MINE:
+            SilverMine* sm = new SilverMine{*this};
+            building = sm;
+            all_revenue_buildings.push_back(sm);
             break;
-        case Building::Type::GOLD_MINE:
-            building = new GoldMine{*this};
+        case Node::Type::GOLD_MINE:
+            GoldMine* gm = new GoldMine{*this};
+            building = gm;
+            all_revenue_buildings.push_back(gm);
             break;
-        case Building::Type::HOUSE:
-            building = new House{*this, 0};
+        case Node::Type::HOUSE:
+            House* h = new House{*this, 0};
+            building = h;
+            all_residential_buildings.push_back(h);
             break;
-        case Building::Type::APARTMENT:
-            building = new Apartment{*this, 0};
+        case Node::Type::APARTMENT:
+            Apartment* ap = new Apartment{*this, 0};
+            building = ap;
+            all_residential_buildings.push_back(ap);
+            break;
+        case Node::Type::STREET:
+            building = new Street(*this);
+            break;
+        case Node::Type::AVENUE:
+            building = new Avenue(*this);
             break;
     }
 
@@ -302,34 +338,34 @@ bool City::construct_at(Building::Type type, const Coordinates &coordinates) {
 
     // Set neighboring buildings
     if (coordinates.x > 0) {
-        Building *neighbor = get_at(coordinates.x - 1, coordinates.y);
+        Node *neighbor = get_at(coordinates.x - 1, coordinates.y);
         if (neighbor) {
-            neighbor->set_east_pointer(building);
-            building->set_west_pointer(neighbor);
+            neighbor->set_neighboring_node(Node::Direction::EAST,building);
+            building->set_neighboring_node(Node::Direction::WEST,neighbor);
         }
     }
 
     if (coordinates.x < grid_size - 1) {
-        Building *neighbor = get_at(coordinates.x + 1, coordinates.y);
+        Node *neighbor = get_at(coordinates.x + 1, coordinates.y);
         if (neighbor) {
-            neighbor->set_west_pointer(building);
-            building->set_east_pointer(neighbor);
+            neighbor->set_neighboring_node(Node::Direction::WEST,building);
+            building->set_neighboring_node(Node::Direction::EAST,neighbor);
         }
     }
 
     if (coordinates.y > 0) {
-        Building *neighbor = get_at(coordinates.x, coordinates.y - 1);
+        Node *neighbor = get_at(coordinates.x, coordinates.y - 1);
         if (neighbor) {
-            neighbor->set_north_pointer(building);
-            building->set_south_pointer(neighbor);
+            neighbor->set_neighboring_node(Node::Direction::NORTH,building);
+            building->set_neighboring_node(Node::Direction::SOUTH,neighbor);
         }
     }
 
     if (coordinates.y < grid_size - 1) {
-        Building *neighbor = get_at(coordinates.x, coordinates.y + 1);
+        Node *neighbor = get_at(coordinates.x, coordinates.y + 1);
         if (neighbor) {
-            neighbor->set_south_pointer(building);
-            building->set_north_pointer(neighbor);
+            neighbor->set_neighboring_node(Node::Direction::SOUTH,building);
+            building->set_neighboring_node(Node::Direction::NORTH,neighbor);
         }
     }
 
@@ -345,36 +381,54 @@ bool City::demolish_at(const Coordinates &coordinates) {
     if (grid[coordinates.x][coordinates.y] == nullptr)
         return false;
 
-    Building *building = grid[coordinates.x][coordinates.y];
+    Node *building = grid[coordinates.x][coordinates.y];
+    switch (building->get_category())
+    {
+    case Node::Category::HEALTH:
+        vector<Health*>::iterator h = find(all_health_buildings.begin(),all_health_buildings.end(),building); /// potential source of error
+        all_health_buildings.erase(h);
+        break;
+    case Node::Category::RESIDENTIAL:
+        vector<Residential*>::iterator p = find(all_residential_buildings.begin(),all_residential_buildings.end(),building); /// potential source of error
+        all_residential_buildings.erase(p);
+        break;
+    case Node::Category::REVENUE:
+        vector<Revenue*>::iterator r = find(all_revenue_buildings.begin(),all_revenue_buildings.end(),building); /// potential source of error
+        all_revenue_buildings.erase(r);
+        break;
+    default:
+        break;
+    }
+
     // Set neighboring buildings
     if (coordinates.x > 0) {
-        Building *neighbor = get_at(coordinates.x - 1, coordinates.y);
+        Node *neighbor = get_at(coordinates.x - 1, coordinates.y);
         if (neighbor) {
-            neighbor->set_east_pointer(nullptr);
+            neighbor->set_neighboring_node(Node::Direction::EAST,nullptr);
             // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.x < grid_size - 1) {
-        Building *neighbor = get_at(coordinates.x + 1, coordinates.y);
+        Node *neighbor = get_at(coordinates.x + 1, coordinates.y);
         if (neighbor) {
-            neighbor->set_west_pointer(nullptr);
+            neighbor->set_neighboring_node(Node::Direction::WEST,nullptr);
             // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.y > 0) {
-        Building *neighbor = get_at(coordinates.x, coordinates.y - 1);
+        Node *neighbor = get_at(coordinates.x, coordinates.y - 1);
         if (neighbor) {
-            neighbor->set_north_pointer(nullptr);
+            neighbor->set_neighboring_node(Node::Direction::NORTH,nullptr);
             // building->deregister_neighboring_building(neighbor);
         }
     }
 
     if (coordinates.y < grid_size - 1) {
-        Building *neighbor = get_at(coordinates.x, coordinates.y + 1);
+        Node *neighbor = get_at(coordinates.x, coordinates.y + 1);
         if (neighbor) {
-            neighbor->set_south_pointer(nullptr);
+            neighbor->set_neighboring_node(Node::Direction::SOUTH,nullptr);
             // building->deregister_neighboring_building(neighbor);
         }
     }

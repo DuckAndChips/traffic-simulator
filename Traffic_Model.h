@@ -27,7 +27,7 @@ using namespace std;
 
 #include "City.h"
 #include "Node.h"
-#include "road/Road.h"
+#include "buildings/Road.h"
 
 
 class Trip_Generation {
@@ -73,7 +73,7 @@ class Trip_Assignment {
 
         /// This function is used to return a vector of Road* vector that records all possible paths from start_pt to end_pt
         std::vector<std::vector<Road*>> get_all_paths(Road* start_pt, Road* end_pt);
-        bool get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths); /// an overloading function used for recursion 
+        bool get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths, std::vector<Road*>& path); /// an overloading function used for recursion 
 
         /// This function load each incremental flows to the road paths with shortest travel time
         void load_traffic(std::vector<std::vector<Road*>> &paths);

@@ -11,11 +11,19 @@
 #include "buildings/GoldMine.h"
 #include "buildings/House.h"
 #include "buildings/Apartment.h"
+#include "buildings/Street.h"
+#include "buildings/Avenue.h"
+#include "trip_distribution.h"
+
 #include <string>
 #include <ostream>
+#include <vector>
+#include <algorithm>
 
 class City {
+    friend class Trip_distribution;
 public:
+    
     struct Coordinates {
         int x;
         int y;
@@ -42,16 +50,16 @@ public:
     int get_population_growth() const;
     int get_population_growth_rate() const;
 
-    Building *get_at(const Coordinates &coordinates) const;
+    Node *get_at(const Coordinates &coordinates) const;
     bool is_empty_at(const Coordinates &coordinates) const;
-    bool can_construct(Building::Type type) const;
-    bool can_construct(Building::Type type, const Coordinates &coordinates) const;
-    bool construct_at(Building::Type type, const Coordinates &coordinates);
+    bool can_construct(Node::Type type) const;
+    bool can_construct(Node::Type type, const Coordinates &coordinates) const;
+    bool construct_at(Node::Type type, const Coordinates &coordinates);
     bool demolish_at(const Coordinates &coordinates);
 
     void move_to_next_turn();
 
-    inline Building *get_at(int x, int y) const {
+    inline Node *get_at(int x, int y) const {
         return get_at(Coordinates{x, y});
     };
 
@@ -59,11 +67,11 @@ public:
         return is_empty_at(Coordinates{x, y});
     };
 
-    inline bool can_construct(Building::Type type, int x, int y) const {
+    inline bool can_construct(Node::Type type, int x, int y) const {
         return can_construct(type, Coordinates{x, y});
     };
 
-    inline bool construct_at(Building::Type type, int x, int y) {
+    inline bool construct_at(Node::Type type, int x, int y) {
         return construct_at(type, Coordinates{x, y});
     };
 
@@ -71,11 +79,32 @@ public:
         return demolish_at(Coordinates{x, y});
     };
 
+    /// Functions that deal with regression coefficients
+    inline float get_home_work_beta_0 () const {return home_work_beta_0;}
+    inline float get_home_work_beta_1 () const{return home_work_beta_1;}
+    inline float get_home_health_beta_0 () const{return home_health_beta_0;}
+    inline float get_home_health_beta_1 () const {return home_health_beta_1;}
+    inline void set_home_work_beta_0 (float beta)  {home_work_beta_0 = beta;}
+    inline void set_home_work_beta_1 (float beta)  {home_work_beta_1 = beta;}
+    inline void set_home_health_beta_0 (float beta)  {home_health_beta_0 = beta;}
+    inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
+    
+
 private:
-    Building ***grid;
+    Node ***grid;
     int grid_size;
     int budget;
     int turn;
+
+    vector<Residential*> all_residential_buildings;
+    vector<Revenue*> all_revenue_buildings;
+    vector<Health*> all_health_buildings;
+
+    /// regression coefficients used in computing the formula used in the traffic models
+    float home_work_beta_0 = 0.8;
+    float home_work_beta_1 = 0.001;
+    float home_health_beta_0 = 0.1;
+    float home_health_beta_1 = 0.00025;
 };
 
 #endif // CITY_H

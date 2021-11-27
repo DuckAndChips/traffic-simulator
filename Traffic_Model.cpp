@@ -148,16 +148,14 @@ std::vector<std::vector<Road*>> Trip_Assignment::get_all_paths(Road* start_pt, R
     std::vector<Road*> path_zero;
     path_zero.push_back(start_pt);
     paths.push_back(path_zero);
-    get_all_paths(start_pt,end_pt,paths);
+    get_all_paths(start_pt,end_pt,paths,path_zero);
     return paths;
 }
 
-bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths){
+bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths, std::vector<Road*>& path){
     
     /// source of error: index handling
     if (paths.size() == 0) return false;
-
-    std::vector<Road*> path = paths[0];
     
     /// end case: reach destination
     if(start_pt == end_pt) return true;
@@ -197,8 +195,11 @@ bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std
         std::vector<std::vector<Road*>> temp_paths;
             std::vector<Road*> path_zero;
             path_zero.push_back(road_options[i]);
+            std::vector<Road*> temp_path;
+            temp_path = path;
+            temp_path.push_back(road_options[i]);
         temp_paths.push_back(path_zero);
-        if(get_all_paths(road_options[i],end_pt,temp_paths)){
+        if(get_all_paths(road_options[i],end_pt,temp_paths,temp_path)){
             for(int j = 0; j < temp_paths.size(); ++j){
                 add_paths.push_back(temp_paths[j]);
             }
