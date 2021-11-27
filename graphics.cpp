@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "graphics.h"       // Havent test : Line 270, 273
 #include "City.h"
 #include "mainwindow.h"
 
@@ -267,15 +267,17 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         case MainWindow::OverlayButton::ROAD:{
         for (int x = 0; x < grid_size; x++) {
             for (int y = 0; y < grid_size; y++) {
-                if (!city->is_empty_at(x, y)) {
+                if (city->get_at(x, y)->get_category() == Node::Type::Road) { // Actual condition : Act on Road Type cell
+                //if (!city->is_empty_at(x, y)){  // For testing : This will act on cell with buildings
                     QBrush brush;
-                    int testingCon = 11;
+                    int testingCon = city->get_at(x,y)->get_traffic_flow;        // Actual condition : Get traffic flow
+                    //int testingCon = 9;            // For Testing : This will make all cell in dark green
                     if (testingCon < 10){
+                        //dark green
+                        brush.setColor(QColor::fromRgbF(0, 0.4, 0.2, 0.8f));
+                    }else if (testingCon < 20){
                         //yellow
                         brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
-                    }else if (testingCon < 20){
-                        //orange
-                        brush.setColor(QColor::fromRgbF(1, 0.5, 0, 0.8f));
                     }else {
                         //red
                         brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
