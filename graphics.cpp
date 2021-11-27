@@ -264,29 +264,31 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     switch (dynamic_cast<MainWindow *>(window())->get_selected_overlay_button()) {
         case MainWindow::OverlayButton::NORMAL:
             break;
-        case MainWindow::OverlayButton::ROAD:
-            for (int x = 0; x < grid_size; x++) {
+        case MainWindow::OverlayButton::ROAD:{
+        for (int x = 0; x < grid_size; x++) {
             for (int y = 0; y < grid_size; y++) {
                 if (!city->is_empty_at(x, y)) {
                     QBrush brush;
-                    // change here
-                    /*switch (city->get_at(x, y)->get_category()) {
-                        case Building::Category::RESIDENTIAL:
-                            brush.setColor(QColor::fromRgbF(0, 0, 1, 0.8f));
-                            break;
-                        case Building::Category::REVENUE:
-                            brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
-                            break;
-                        case Building::Category::HEALTH:
-                            brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
-                            break;
-                    }*/
+                    int testingCon = 11;
+                    if (testingCon < 10){
+                        //yellow
+                        brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
+                    }else if (testingCon < 20){
+                        //orange
+                        brush.setColor(QColor::fromRgbF(1, 0.5, 0, 0.8f));
+                    }else {
+                        //red
+                        brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
+                    }
                     brush.setStyle(Qt::SolidPattern);
                     fillRect(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100, brush);
                 }
             }
         }
-            break;
+        break;
+    }
+
+
         case MainWindow::OverlayButton::TYPE: {
             for (int x = 0; x < grid_size; x++) {
                 for (int y = 0; y < grid_size; y++) {
