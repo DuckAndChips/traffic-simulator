@@ -1,7 +1,7 @@
 #ifndef REVENUE_H
 #define REVENUE_H
 
-#include "Building.h"
+#include "Node.h"
 class Revenue: public Node {
 public:
     virtual Node::Category get_category() const override;

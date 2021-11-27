@@ -1,7 +1,7 @@
 #ifndef HEALTH_H
 #define HEALTH_H
 
-#include "Building.h"
+#include "Node.h"
 
 class Health: public Node {
 public:

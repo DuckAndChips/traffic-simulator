@@ -3,6 +3,8 @@
 
 #include <string>
 
+const std::string NO_ROAD_WARNING = "Warning: No road nearby!";
+
 const std::string APARTMENT_HEADER = "Apartment";
 const std::string APARTMENT_1_1 = "Population: ";
 const std::string APARTMENT_2_1 = "Max Population: ";
@@ -40,5 +42,13 @@ const std::string GOLD_2_1 = "2 * (Total Population + Neighboring Population)";
 const std::string SILVER_HEADER = "Silver Mine";
 const std::string SILVER_1_1 = "Revenue: ";
 const std::string SILVER_2_1 = "1 * (Total Population + Neighboring Population)";
+
+const std::string STREET_HEADER = "Street";
+const std::string AVENUE_HEADER = "Avenue";
+const std::string ROAD_1_1 = "Maximum Traffic Flow: ";
+const std::string ROAD_2_1 = "Traffic Flow: ";
+const std::string ROAD_2_2 = "(Can be greater than maximum traffic flow)";
+const std::string ROAD_3_1 = "Travel Time: ";
+const std::string ROAD_4_1 = "Free Flow Travel Time * ( 1 + 0.15 * (Traffic Flow / Max Traffic Flow) ^ 4)";
 
 #endif // BUILDINGINFORMATIONFORMATSTRING_H

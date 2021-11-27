@@ -1,7 +1,7 @@
 #ifndef RESIDENTIAL_H
 #define RESIDENTIAL_H
 
-#include "Building.h"
+#include "Node.h"
 class Residential: public Node {
 public:
     virtual Node::Category get_category() const override;
