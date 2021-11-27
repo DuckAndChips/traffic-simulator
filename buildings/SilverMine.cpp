@@ -8,7 +8,7 @@ using namespace std;
 
 SilverMine::SilverMine(City &city): Revenue(city) {}
 
-Building::Type SilverMine::get_type() const {
+Node::Type SilverMine::get_type() const {
     return Type::SILVER_MINE;
 }
 

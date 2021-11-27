@@ -2,9 +2,9 @@
 #define REVENUE_H
 
 #include "Building.h"
-class Revenue: public Building {
+class Revenue: public Node {
 public:
-    virtual Building::Category get_category() const override;
+    virtual Node::Category get_category() const override;
 
 protected:
     explicit Revenue(City &city);

@@ -2,9 +2,10 @@
 #define HEALTH_H
 
 #include "Building.h"
-class Health: public Building {
+
+class Health: public Node {
 public:
-    virtual Building::Category get_category() const override;
+    virtual Node::Category get_category() const override;
 
 protected:
     explicit Health(City &city);

@@ -7,7 +7,7 @@ public:
     static const int cost{500};
 
     explicit Hospital(City &city);
-    virtual Building::Type get_type() const override;
+    virtual Node::Type get_type() const override;
     virtual int get_cost() const override;
 
     virtual int get_population_growth_rate_contribution() const override;

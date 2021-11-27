@@ -2,16 +2,16 @@
 #define RESIDENTIAL_H
 
 #include "Building.h"
-class Residential: public Building {
+class Residential: public Node {
 public:
-    virtual Building::Category get_category() const override;
+    virtual Node::Category get_category() const override;
 
     virtual int get_population() const override;
     virtual int get_population_growth() const override;
     virtual int get_population_growth_rate_contribution() const override;
     virtual void increase_population(int population) override;
-    virtual int update_work_trips() override;
-    virtual int update_health_trips() override;
+    virtual int get_work_trips() override;
+    virtual int get_health_trips() override;
 
 protected:
     int population;

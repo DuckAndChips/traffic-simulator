@@ -7,7 +7,7 @@ using namespace std;
 
 Hospital::Hospital(City &city): Health(city) {}
 
-Building::Type Hospital::get_type() const {
+Node::Type Hospital::get_type() const {
     return Type::HOSPITAL;
 }
 

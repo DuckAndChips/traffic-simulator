@@ -7,7 +7,7 @@ public:
     static const int cost{400};
 
     explicit GoldMine(City &city);
-    virtual Building::Type get_type() const override;
+    virtual Node::Type get_type() const override;
     virtual int get_cost() const override;
 
     virtual int get_revenue() const override;

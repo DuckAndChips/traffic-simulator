@@ -8,7 +8,7 @@ public:
 
     explicit Apartment(City &city, int population);
 
-    virtual Building::Type get_type() const override;
+    virtual Node::Type get_type() const override;
     virtual int get_cost() const override;
     virtual int get_max_population() const override;
     virtual std::string get_long_information() const override;

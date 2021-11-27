@@ -1,7 +1,7 @@
 #include "Revenue.h"
 
-Revenue::Revenue(City &city): Building(city) {}
+Revenue::Revenue(City &city): Node(city) {}
 
-Building::Category Revenue::get_category() const {
+Node::Category Revenue::get_category() const {
     return Category::REVENUE;
 }

@@ -1,7 +1,7 @@
 #include "Health.h"
 
-Health::Health(City &city): Building(city) {}
+Health::Health(City &city): Node(city) {}
 
-Building::Category Health::get_category() const {
+Node::Category Health::get_category() const {
     return Category::HEALTH;
 }

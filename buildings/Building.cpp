@@ -1,51 +1,73 @@
 #include "Building.h"
 #include "../City.h"
 
-Building::Building(City &city): city(city) {}
 
-int Building::get_revenue() const {
+Node::Node(City &city): city(city) {}
+
+int Node::get_revenue() const {
     return 0;
 }
 
-int Building::get_population() const {
+int Node::get_population() const {
     return 0;
 }
 
-int Building::get_max_population() const {
+int Node::get_max_population() const {
     return 0;
 }
 
-int Building::get_population_growth() const {
+int Node::get_population_growth() const {
     return 0;
 }
 
-int Building::get_population_growth_rate_contribution() const {
+int Node::get_population_growth_rate_contribution() const {
     return 0;
 }
 
-void Building::increase_population(int population) {
-
+int Node::get_work_trips(){
+    return 0;
 }
 
-// bool Building::register_neighboring_building(Building *building) {
-//     for (int i = 0; i < 4; ++i) {
-//         if (neighboring_buildings[i] == nullptr) {
-//             neighboring_buildings[i] = building;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+int Node::get_health_trips(){
+    return 0;
+}
 
-// bool Building::deregister_neighboring_building(Building *building) {
-//     for (int i = 0; i < 4; ++i) {
-//         if (neighboring_buildings[i] == building) {
-//             neighboring_buildings[i] = nullptr;
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+
+void Node::increase_population(int population){}
+
+Node* Node::get_neighboring_node(Node::Direction direction) const{
+    return neighboring_nodes[static_cast<int>(direction)];
+}
+void Node::set_neighboring_node(Node::Direction direction, Node* n){
+    neighboring_nodes[static_cast<int>(direction)] = n;
+}
+
+bool Node::is_neighbor_empty(Node::Direction direction) const{
+    if(neighboring_nodes[static_cast<int>(direction)] == nullptr){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+bool Node::is_neighbor_road(Node::Direction direction) const{
+    Node* check = neighboring_nodes[static_cast<int>(direction)];
+    if(check == nullptr){
+        return false;
+    }
+    else if(check->get_category() == Node::Category::ROAD){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+/**
+ * Warning:
+ * The following implementations are for the original PA3 and PA4 and should be modified after implementation of the new game algorithm 
+ *
 
 int Building::number_neighboring_health_buildings() const {
     int count = 0;
@@ -90,3 +112,8 @@ int Building::number_neighboring_gold_mines() const {
 
     return count;
 }
+*/
+
+
+
+

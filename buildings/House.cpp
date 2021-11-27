@@ -7,7 +7,7 @@ using namespace std;
 
 House::House(City &city, int population) : Residential(city, population) {}
 
-Building::Type House::get_type() const {
+Node::Type House::get_type() const {
     return Type::HOUSE;
 }
 
