@@ -104,6 +104,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_SELECTED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::CLINIC:
         if(city->get_budget() < 50){
@@ -120,6 +122,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::DEMOLISH:
         MainWindow::selected_side_menu_button = SideMenuButton::DEMOLISH;
@@ -131,6 +135,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::GOLD_MINE:
         if(city->get_budget() < 400){
@@ -147,6 +153,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::HOSPITAL:
         if(city->get_budget() < 500){
@@ -163,6 +171,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::HOUSE:
         if(city->get_budget() < 50){
@@ -179,6 +189,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::NAVIGATE:
         MainWindow::selected_side_menu_button = SideMenuButton::NAVIGATE;
@@ -190,6 +202,8 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::SILVER_MINE:
         if(city->get_budget() < 50){
@@ -206,9 +220,46 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::STREET:
+        if(city->get_budget() < 10){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
+            break;
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_SELECTED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
+        break;
+    case SideMenuButton::AVENUE:
+        if(city->get_budget() < 30){
+            //insufficient money
+            MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
+            break;
+        }
+        MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
+        ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_navigate->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+        ui->btn_avenue->setStyleSheet(BTN_SELECTED_STYLE);
         break;
     }
-
     // END OF YOUR IMPLEMENTATION
 }
 

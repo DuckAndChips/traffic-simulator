@@ -272,7 +272,71 @@ background-image: url(:/resources/images/stripes.png);
            <property name="horizontalSpacing">
             <number>6</number>
            </property>
-           <item row="4" column="2">
+           <item row="7" column="0">
+            <widget class="QToolButton" name="btn_destruct">
+             <property name="minimumSize">
+              <size>
+               <width>175</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Comic Sans MS</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Remove</string>
+             </property>
+             <property name="icon">
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/destruct.png</normaloff>:/resources/images/destruct.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QToolButton" name="btn_silver">
+             <property name="minimumSize">
+              <size>
+               <width>175</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Comic Sans MS</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Silver Mine</string>
+             </property>
+             <property name="icon">
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/silver_mine.png</normaloff>:/resources/images/silver_mine.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="2">
             <widget class="QToolButton" name="btn_navigate">
              <property name="minimumSize">
               <size>
@@ -292,38 +356,6 @@ background-image: url(:/resources/images/stripes.png);
              <property name="icon">
               <iconset resource="images.qrc">
                <normaloff>:/resources/images/navigation.png</normaloff>:/resources/images/navigation.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>150</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QToolButton" name="btn_house">
-             <property name="minimumSize">
-              <size>
-               <width>175</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Comic Sans MS</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>House</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/house.png</normaloff>:/resources/images/house.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -368,8 +400,8 @@ background-image: url(:/resources/images/stripes.png);
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
-            <widget class="QToolButton" name="btn_destruct">
+           <item row="3" column="0">
+            <widget class="QToolButton" name="btn_street">
              <property name="minimumSize">
               <size>
                <width>175</width>
@@ -383,75 +415,11 @@ background-image: url(:/resources/images/stripes.png);
               </font>
              </property>
              <property name="text">
-              <string>Remove</string>
+              <string>Street</string>
              </property>
              <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/destruct.png</normaloff>:/resources/images/destruct.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>150</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QToolButton" name="btn_clinic">
-             <property name="minimumSize">
-              <size>
-               <width>175</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Comic Sans MS</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Clinic</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/clinic.png</normaloff>:/resources/images/clinic.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>150</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QToolButton" name="btn_silver">
-             <property name="minimumSize">
-              <size>
-               <width>175</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Comic Sans MS</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Silver Mine</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/silver_mine.png</normaloff>:/resources/images/silver_mine.png</iconset>
+              <iconset>
+               <normaloff>images/street_15.png</normaloff>images/street_15.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -499,7 +467,103 @@ background-image: url(:/resources/images/stripes.png);
              </property>
             </widget>
            </item>
+           <item row="0" column="0">
+            <widget class="QToolButton" name="btn_clinic">
+             <property name="minimumSize">
+              <size>
+               <width>175</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Comic Sans MS</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Clinic</string>
+             </property>
+             <property name="icon">
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/clinic.png</normaloff>:/resources/images/clinic.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="2">
+            <widget class="QToolButton" name="btn_avenue">
+             <property name="minimumSize">
+              <size>
+               <width>175</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Comic Sans MS</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Avenue</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>images/avenue_15.png</normaloff>images/avenue_15.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QToolButton" name="btn_house">
+             <property name="minimumSize">
+              <size>
+               <width>175</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Comic Sans MS</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>House</string>
+             </property>
+             <property name="icon">
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/house.png</normaloff>:/resources/images/house.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>150</width>
+               <height>100</height>
+              </size>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonTextUnderIcon</enum>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
             <widget class="QToolButton" name="btn_apartment">
              <property name="minimumSize">
               <size>
@@ -519,64 +583,6 @@ background-image: url(:/resources/images/stripes.png);
              <property name="icon">
               <iconset resource="images.qrc">
                <normaloff>:/resources/images/apartment.png</normaloff>:/resources/images/apartment.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>150</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QToolButton" name="btn_avenue">
-             <property name="font">
-              <font>
-               <family>Comic Sans MS</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Avenue</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/road_3_E_S_W.png</normaloff>:/resources/images/road_3_E_S_W.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>150</width>
-               <height>100</height>
-              </size>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1" colspan="2">
-            <widget class="QToolButton" name="btn_road">
-             <property name="minimumSize">
-              <size>
-               <width>175</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Comic Sans MS</family>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Road</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/resources/images/road_4_N_E_S_W.png</normaloff>:/resources/images/road_4_N_E_S_W.png</iconset>
              </property>
              <property name="iconSize">
               <size>

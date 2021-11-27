@@ -13,7 +13,7 @@ class MainWindow: public QMainWindow
 
 public:
     enum class SideMenuButton {
-        CLINIC = 1, HOSPITAL = 2, SILVER_MINE = 3, GOLD_MINE = 4, HOUSE = 5, APARTMENT = 6, DEMOLISH = 7, NAVIGATE = 8
+        CLINIC = 1, HOSPITAL = 2, SILVER_MINE = 3, GOLD_MINE = 4, HOUSE = 5, APARTMENT = 6, STREET = 7, AVENUE = 8, DEMOLISH = 9, NAVIGATE = 10
     };
 
     enum class OverlayButton {
@@ -49,6 +49,8 @@ private slots:
     void on_btn_house_clicked();
     void on_btn_navigate_clicked();
     void on_btn_silver_clicked();
+    void on_btn_street_clicked();
+    void on_btn_avenue_clicked();
 private:
     // Initialization functions, called in constructor
     void initialize_overlay_buttons();
