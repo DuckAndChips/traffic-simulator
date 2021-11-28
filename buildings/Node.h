@@ -1,8 +1,3 @@
-/**
-* Notes by Jacky:
-* I attempted to change the file name of this file but it led to linkage error that I do not know how to solve
-* If you guys also don't know how to solve then I'll just handle it using some stupid method (recreate a new file) later
-*/
 
 #ifndef NODE_H
 #define NODE_H
@@ -56,6 +51,7 @@ public:
     virtual int get_population_growth_rate_contribution() const;
     virtual int get_work_trips(); /// This functions also update the work_trips data member for a Residential object
     virtual int get_health_trips(); /// This functions also update the health_trips data member for a Residential object
+    virtual int get_attractiveness() const; 
 
     /// Functions that implement the gaming mechanism 
     virtual void increase_population(int population);
