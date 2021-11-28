@@ -35,6 +35,9 @@ int Node::get_health_trips(){
     return 0;
 }
 
+int Node::get_attractiveness() const{
+    return 0;
+}
 
 void Node::increase_population(int population){}
 
