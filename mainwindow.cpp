@@ -49,6 +49,8 @@ void MainWindow::initialize_side_menu_buttons() {
     ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
     ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
     // END OF YOUR IMPLEMENTATION
