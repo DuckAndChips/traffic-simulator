@@ -16,6 +16,10 @@ int SilverMine::get_cost() const {
     return SilverMine::cost;
 }
 
+int SilverMine::get_attractiveness() const {
+    return SilverMine::attractiveness;
+}
+
 int SilverMine::get_revenue() const {
     return city.get_population() + number_neighboring_population();
 }
