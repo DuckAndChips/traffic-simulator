@@ -59,6 +59,7 @@ private:
     // Load and unload icons
     void load_icons();
     void dealloc_icons();
+    QPixmap get_road_icon(Node::Type type, int x, int y);
 
     City *const city;
     int grid_size;
@@ -80,6 +81,8 @@ private:
 
     // Icons sorted according to the enum BuildingType
     QPixmap* ICONS;
+    QPixmap* STREET_ICONS;
+    QPixmap* AVENUE_ICONS;
 };
 
 #endif // GRAPHICS_H

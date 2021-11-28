@@ -10,5 +10,37 @@
         <file>images/navigation.png</file>
         <file>images/destruct.png</file>
         <file>images/next.png</file>
+        <file>images/street_10.png</file>
+        <file>images/street_0.png</file>
+        <file>images/street_1.png</file>
+        <file>images/street_2.png</file>
+        <file>images/street_3.png</file>
+        <file>images/street_4.png</file>
+        <file>images/street_5.png</file>
+        <file>images/street_6.png</file>
+        <file>images/street_7.png</file>
+        <file>images/street_8.png</file>
+        <file>images/street_9.png</file>
+        <file>images/street_11.png</file>
+        <file>images/street_12.png</file>
+        <file>images/street_13.png</file>
+        <file>images/street_14.png</file>
+        <file>images/street_15.png</file>
+        <file>images/avenue_0.png</file>
+        <file>images/avenue_1.png</file>
+        <file>images/avenue_2.png</file>
+        <file>images/avenue_3.png</file>
+        <file>images/avenue_4.png</file>
+        <file>images/avenue_5.png</file>
+        <file>images/avenue_6.png</file>
+        <file>images/avenue_7.png</file>
+        <file>images/avenue_8.png</file>
+        <file>images/avenue_9.png</file>
+        <file>images/avenue_10.png</file>
+        <file>images/avenue_11.png</file>
+        <file>images/avenue_12.png</file>
+        <file>images/avenue_13.png</file>
+        <file>images/avenue_14.png</file>
+        <file>images/avenue_15.png</file>
     </qresource>
 </RCC>

@@ -418,8 +418,8 @@ background-image: url(:/resources/images/stripes.png);
               <string>Street</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/street_15.png</normaloff>images/street_15.png</iconset>
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/street_15.png</normaloff>:/resources/images/street_15.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -517,8 +517,8 @@ background-image: url(:/resources/images/stripes.png);
               <string>Avenue</string>
              </property>
              <property name="icon">
-              <iconset>
-               <normaloff>images/avenue_15.png</normaloff>images/avenue_15.png</iconset>
+              <iconset resource="images.qrc">
+               <normaloff>:/resources/images/avenue_15.png</normaloff>:/resources/images/avenue_15.png</iconset>
              </property>
              <property name="iconSize">
               <size>

@@ -7,6 +7,7 @@
 #include <QWheelEvent>
 #include <QMessageBox>
 #include <QTextFormat>
+#include <QDebug>
 
 #include <cmath>
 #include <regex>
@@ -85,7 +86,9 @@ void GameWidget::mouseReleaseEvent(QMouseEvent* event) {
     int screen_x = event->x();
     int screen_y = event->y();
     int x, y;
-    obtain_grid_coordinates(screen_x, screen_y, x, y);// Check if selected point lies on the grid
+    obtain_grid_coordinates(screen_x, screen_y, x, y);
+
+    // Check if selected point lies on the grid
     if (x >= 0 && y >= 0 && x < grid_size && y < grid_size) {
         MainWindow *main_window = dynamic_cast<MainWindow *>(window());
         MainWindow::SideMenuButton button_selected = main_window->get_selected_side_menu_button();
@@ -340,29 +343,51 @@ void GameWidget::paintEvent(QPaintEvent* event) {
             paint.setPen(original);
             break;
         }
-    }// Draw buildings on the grid
+    }
+
+    // Draw buildings on the grid
     for (int x = 0; x < grid_size; x++) {
         for (int y = 0; y < grid_size; y++) {
             if (!city->is_empty_at(x, y)) {
-                drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
-                           ICONS[static_cast<int>(city->get_at(x, y)->get_type()) - 1]);
+                Node::Type type = city->get_at(x, y)->get_type();
+                if (type == Node::Type::STREET || type == Node::Type::AVENUE){
+                    drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
+                               get_road_icon(type, x, y));
+                } else {
+                    drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
+                               ICONS[static_cast<int>(type) - 1]);
+                }
             }
         }
-    }// Render extra effects on the grid, depending on the build mode
+    }
+
+    // Render extra effects on the grid, depending on the build mode
     if (hovering_grid_x >= 0 && hovering_grid_y >= 0 && hovering_grid_x < grid_size && hovering_grid_y < grid_size)
         if ((tick / 10) % 2 == 0) {
             MainWindow::SideMenuButton button_selected = dynamic_cast<MainWindow *>(window())->get_selected_side_menu_button();
             if (button_selected != MainWindow::SideMenuButton::DEMOLISH &&
                 button_selected != MainWindow::SideMenuButton::NAVIGATE &&
                 city->is_empty_at(hovering_grid_x, hovering_grid_y)) {
+
+                QPixmap icon;
+                if (button_selected == MainWindow::SideMenuButton::AVENUE)
+                    icon = get_road_icon(Node::Type::AVENUE, hovering_grid_x, hovering_grid_y);
+                else if (button_selected == MainWindow::SideMenuButton::STREET)
+                    icon = get_road_icon(Node::Type::STREET, hovering_grid_x, hovering_grid_y);
+                else
+                    icon = ICONS[static_cast<int>(button_selected) - 1];
+
                 drawPixmap(paint, (hovering_grid_x - grid_size / 2) * 100, (hovering_grid_y - grid_size / 2) * 100, 100,
-                           100, ICONS[static_cast<int>(button_selected) - 1]);
-            }else if (button_selected == MainWindow::SideMenuButton::DEMOLISH &&
-                      !city->is_empty_at(hovering_grid_x, hovering_grid_y)) {
+                           100, icon);
+
+            } else if (button_selected == MainWindow::SideMenuButton::DEMOLISH &&
+                       !city->is_empty_at(hovering_grid_x, hovering_grid_y)) {
                 fillRect(paint, (hovering_grid_x - grid_size / 2) * 100, (hovering_grid_y - grid_size / 2) * 100, 100,
                          100, QBrush{QColor::fromRgbF(1.0f, 0, 0, 0.5f)});
             }
-        }// Draw grid lines
+        }
+
+    // Draw grid lines
     for (int x = 0; x <= grid_size; x++) {
         int xpos = (x - grid_size / 2) * 100;
         drawLine(paint, xpos, min, xpos, max);
@@ -370,7 +395,9 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     for (int y = 0; y <= grid_size; y++) {
         int ypos = (y - grid_size / 2) * 100;
         drawLine(paint, min, ypos, max, ypos);
-    }// Draw player statistics
+    }
+
+    // Draw player statistics
 #define STAT_WIDTH 500
 #define HEIGHT 40
     paint.drawText(10, 10 + HEIGHT, STAT_WIDTH, 50, Qt::AlignTop,
@@ -393,8 +420,40 @@ void GameWidget::load_icons() {
                             {":/resources/images/gold_mine.png"},
                             {":/resources/images/house.png"},
                             {":/resources/images/apartment.png"} };
+    STREET_ICONS = new QPixmap[16];
+    AVENUE_ICONS = new QPixmap[16];
+    for(int i = 0; i < 16; i++){
+        STREET_ICONS[i] = QPixmap {":/resources/images/street_" + QString::number(i) + ".png"};
+        AVENUE_ICONS[i] = QPixmap {":/resources/images/avenue_" + QString::number(i) + ".png"};
+    }
 }
 
 void GameWidget::dealloc_icons() {
     delete[] ICONS;
+    delete[] STREET_ICONS;
+    delete[] AVENUE_ICONS;
+}
+
+// Get variety of road icon based on x-y coordinate
+QPixmap GameWidget::get_road_icon(Node::Type type, int x, int y){
+
+    bool is_empty[4] = {false};
+
+    // Saves if the node is empty for N, E, S, W directions
+    for (int i = 0; i < 4; i++) {
+        if (city->get_at(x, y) != nullptr)
+            is_empty[i] = city->get_at(x, y)->is_neighbor_empty(static_cast<Node::Direction>(i));
+        else
+            is_empty[i] = true;
+    }
+
+    /*  Return road icon according to type and neighbors
+        Tileset filenames are encoded such that the number after its suffix would be:
+        !is_empty[north] + 2 * !is_empty[east] + 4 * !is_empty[south] + 8 * !is_empty[west] */
+    if (type == Node::Type::STREET) {
+        return STREET_ICONS[ !is_empty[0] + 2 * !is_empty[1] + 4 * !is_empty[2] + 8 * !is_empty[3] ];
+    } else if (type == Node::Type::AVENUE) {
+        return AVENUE_ICONS[ !is_empty[0] + 2 * !is_empty[1] + 4 * !is_empty[2] + 8 * !is_empty[3] ];
+    } else return QPixmap {":/resources/images/avenue_15.png"};
+
 }

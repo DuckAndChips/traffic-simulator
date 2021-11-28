@@ -41,6 +41,8 @@ void MainWindow::initialize_side_menu_buttons() {
     ui->btn_gold->setText(ui->btn_gold->text() + " $" + QString::number(GoldMine::cost));
     ui->btn_house->setText(ui->btn_house->text() + " $" + QString::number(House::cost));
     ui->btn_apartment->setText(ui->btn_apartment->text() + " $" + QString::number(Apartment::cost));
+    ui->btn_street->setText(ui->btn_street->text() + " $" + QString::number(Street::cost));
+    ui->btn_avenue->setText(ui->btn_avenue->text() + " $" + QString::number(Avenue::cost));
 
     // START OF YOUR IMPLEMENTATION
     ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
@@ -49,6 +51,8 @@ void MainWindow::initialize_side_menu_buttons() {
     ui->btn_gold->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_house->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_apartment->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_street->setStyleSheet(BTN_RELEASED_STYLE);
+    ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
     ui->btn_navigate->setStyleSheet(BTN_SELECTED_STYLE);
     ui->btn_destruct->setStyleSheet(BTN_RELEASED_STYLE);
     // END OF YOUR IMPLEMENTATION
@@ -224,12 +228,12 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::STREET:
-        if(city->get_budget() < 10){
+        if(city->get_budget() < Street::cost){
             //insufficient money
             MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
         }
-        MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
+        MainWindow::selected_side_menu_button = SideMenuButton::STREET;
         ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);
@@ -242,12 +246,12 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
         ui->btn_avenue->setStyleSheet(BTN_RELEASED_STYLE);
         break;
     case SideMenuButton::AVENUE:
-        if(city->get_budget() < 30){
+        if(city->get_budget() < Avenue::cost){
             //insufficient money
             MainWindow::on_side_menu_button_clicked(SideMenuButton::NAVIGATE);
             break;
         }
-        MainWindow::selected_side_menu_button = SideMenuButton::SILVER_MINE;
+        MainWindow::selected_side_menu_button = SideMenuButton::AVENUE;
         ui->btn_clinic->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_hospital->setStyleSheet(BTN_RELEASED_STYLE);
         ui->btn_silver->setStyleSheet(BTN_RELEASED_STYLE);

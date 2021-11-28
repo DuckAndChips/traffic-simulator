@@ -63,7 +63,7 @@ public:
     /// Functions that handle the Node pointers array used in this 2D doubly linked list data structure
     Node* get_neighboring_node(Direction direction) const;
     void set_neighboring_node(Direction direcion, Node* n);
-    bool is_neighbor_empty(Direction direction) const;
+    bool is_neighbor_empty(Direction direction);
     bool is_neighbor_road(Direction direcion) const; 
 
     /** 
@@ -82,7 +82,7 @@ protected:
     City &city;
 
 private:
-    Node* neighboring_nodes[4]{};
+    Node* neighboring_nodes[4];
 };
 
 #endif // NODE_H

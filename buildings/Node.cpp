@@ -2,7 +2,10 @@
 #include "../City.h"
 
 
-Node::Node(City &city): city(city) {}
+Node::Node(City &city): city(city) {
+    for(int i = 0; i < 4; i++)
+        neighboring_nodes[i] = nullptr;
+}
 
 int Node::get_revenue() const {
     return 0;
@@ -42,7 +45,7 @@ void Node::set_neighboring_node(Node::Direction direction, Node* n){
     neighboring_nodes[static_cast<int>(direction)] = n;
 }
 
-bool Node::is_neighbor_empty(Node::Direction direction) const{
+bool Node::is_neighbor_empty(Node::Direction direction){
     if(neighboring_nodes[static_cast<int>(direction)] == nullptr){
         return true;
     }
@@ -113,6 +116,23 @@ int Building::number_neighboring_gold_mines() const {
     return count;
 }
 */
+
+// Dummy Implementations
+int Node::number_neighboring_residential_buildings() const{
+    return 0;
+}
+
+int Node::number_neighboring_health_buildings() const{
+    return 0;
+}
+
+int Node::number_neighboring_gold_mines() const{
+    return 0;
+}
+
+int Node::number_neighboring_population() const{
+    return 0;
+}
 
 
 
