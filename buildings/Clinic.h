@@ -11,6 +11,7 @@ public:
     virtual int get_cost() const override;
 
     virtual int get_population_growth_rate_contribution() const override;
+    virtual int get_attractiveness() const override;
 
     virtual std::string get_long_information() const override;
     virtual std::string get_short_information() const override;
