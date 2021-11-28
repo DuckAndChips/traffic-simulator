@@ -384,7 +384,7 @@ bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
     return true;
 }
 
-bool City::demolish_at(const Coordinates &coordinates) {
+bool City::demolish_at(const City::Coordinates &coordinates) {
     if (coordinates.x < 0 || coordinates.x >= grid_size)
         return false;
     if (coordinates.y < 0 || coordinates.y >= grid_size)
@@ -456,8 +456,31 @@ bool City::demolish_at(const Coordinates &coordinates) {
 
 void City::move_to_next_turn() {
     turn++;
+
     /**
-        * Compute revenue first
+        * Handle traffic first
+        */
+    std::vector<Road*> dummy_r;
+    std::vector<std::vector<int>> dummy_od;
+    Trip_Assignment home_work_trip_assignment(*this,dummy_r,dummy_r,dummy_od);
+    Trip_Assignment home_health_trip_assignment(*this,dummy_r,dummy_r,dummy_od);
+
+    Trip_Distribution home_work_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
+    if(home_work_trip.trip_distribution_main(Node::Category::REVENUE)){
+        home_work_trip_assignment.set_Traffic_Model(
+            home_work_trip.origin, home_work_trip.destination, home_work_trip.OD_matrix
+        );
+    }
+
+    Trip_Distribution home_health_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
+    if(home_health_trip.trip_distribution_main(Node::Category::HEALTH)){
+        home_health_trip_assignment.set_Traffic_Model(
+            home_health_trip.origin, home_health_trip.destination, home_health_trip.OD_matrix
+        );
+    }
+
+    /**
+        * Compute revenue 
         */
     budget += get_revenue();
 

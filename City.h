@@ -13,6 +13,7 @@
 #include "buildings/Apartment.h"
 #include "buildings/Street.h"
 #include "buildings/Avenue.h"
+#include "Traffic_Model.h"
 
 #include <string>
 #include <ostream>
@@ -91,12 +92,11 @@ public:
     
 
 private:
-    
+    Node ***grid;
     int grid_size;
     int budget;
     int turn;
 
-    Node ***grid;
     vector<Residential*> all_residential_buildings;
     vector<Revenue*> all_revenue_buildings;
     vector<Health*> all_health_buildings;

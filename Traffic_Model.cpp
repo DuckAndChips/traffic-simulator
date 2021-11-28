@@ -56,6 +56,15 @@ Trip_Distribution::Trip_Distribution(City &city, std::vector<Residential*> & res
         city(city),all_residential_building(residential_buildings),
         all_revenue_building(revenue_buildings), all_health_building(health_buildings){}
 
+Trip_Assignment::Trip_Assignment(City &citi, std::vector<Road*>& origins, std::vector<Road*>& destinations, std::vector<std::vector<int>>& OD):
+        city(citi),origin(origins),destination(destinations), OD_Matrix(OD){}
+
+void Trip_Assignment::set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD){
+    this->origin = origins;
+    this->destination = destination;
+    this->OD_Matrix = OD;
+}
+
 bool Trip_Distribution::trip_distribution_main(Node::Category category){
     /// No need for distribution and assignment
     if(all_residential_building.size() == 0 || category == Node::Category::RESIDENTIAL || category == Node::Category::ROAD)
@@ -334,8 +343,9 @@ void Trip_Assignment::trip_assignment_main(){
 
     /// loops
     for(int i = 0; i < origin.size(); ++i){
+        if(origin[i] == nullptr) continue;
         for(int j = 0; j < destination.size(); ++j){
-            if(origin[i] == nullptr || destination[j] == nullptr) continue;
+            if(destination[j] == nullptr) continue;
             int trips = OD_Matrix[i][j];
             if(trips == 0) continue;
             std::vector<std::vector<Road*>> paths = get_all_paths(origin[i], destination[j]);

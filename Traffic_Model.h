@@ -28,7 +28,6 @@ using namespace std;
  * Step 4: Trip_Assignment class in this file
  */
 
-class City;
 
 /**
  * Trip_Distribution is a class that perform the second step of the sequential demand focasting model.
@@ -150,7 +149,6 @@ class Trip_Assignment {
         std::vector<Road*>& origin;
         std::vector<Road*>& destination;
         std::vector<std::vector<int>>& OD_Matrix;
-        std::vector<std::vector<float>> OD_travel_time;
         City &city;
         friend class City;
     public:
@@ -159,8 +157,8 @@ class Trip_Assignment {
         static const int incremental_amount{1};        
 
         /// constructors and function that setup data members
-        explicit Trip_Assignment(std::vector<Road*>& origin, std::vector<Road*>& destination, std::vector<std::vector<int>>& OD_Matrix);
-        void set_Traffic_Model(std::vector<Road*> origin, std::vector<Road*> destination, std::vector<std::vector<int>> OD_Matrix);
+        explicit Trip_Assignment(City &citi, std::vector<Road*>& origins, std::vector<Road*>& destinations, std::vector<std::vector<int>>& OD);
+        void set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD);
 
         /// Main functions used for trip assigment
         void trip_assignment_main();
