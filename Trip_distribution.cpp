@@ -4,8 +4,6 @@ Trip_distribution::Trip_distribution(City &city):city(city){
     Trip_distribution::set_all_residential();
     Trip_distribution::set_all_revenue();
     Trip_distribution::set_all_health();
-
-
 }
 
 void Trip_distribution::set_all_residential(){
@@ -46,7 +44,7 @@ void Trip_distribution::set_all_health(){
 
 void Trip_distribution::set_origin(){
     for(std::vector<Residential*>::iterator i = all_residential_building.begin(); i != all_residential_building.end(); i++){
-        Residential* residential = static_cast<Residential*>(*i);
+        Residential* residential = *i;
         if(residential->is_neighbor_road(Node::Direction::NORTH) == true){
             origin.push_back(static_cast<Road*>(residential->get_neighboring_node(Node::Direction::NORTH)));
         }
@@ -65,7 +63,7 @@ void Trip_distribution::set_origin(){
 void Trip_distribution::set_work_destination(){
     all_destination_building = static_cast<std::vector<Node*>>(all_revenue_building);
     for(std::vector<Revenue*>::iterator i = all_revenue_building.begin(); i != all_revenue_building.end(); i++){
-        Revenue* revenue = static_cast<Revenue*>(*i);
+        Revenue* revenue = *i;
         if(revenue->is_neighbor_road(Node::Direction::NORTH) == true){
             destination.push_back(static_cast<Road*>(revenue->get_neighboring_node(Node::Direction::NORTH)));
         }
@@ -82,8 +80,9 @@ void Trip_distribution::set_work_destination(){
 }
 
 void Trip_distribution::set_health_destination(){
+    all_destination_building = static_cast<std::vector<Node*>>(all_health_building);
     for(std::vector<Health*>::iterator i = all_health_building.begin(); i != all_health_building.end(); i++){
-        Health* health = static_cast<Health*>(*i);
+        Health* health = *i;
         if(health->is_neighbor_road(Node::Direction::NORTH) == true){
             destination.push_back(static_cast<Road*>(health->get_neighboring_node(Node::Direction::NORTH)));
         }
@@ -105,7 +104,7 @@ void Trip_distribution::OD_matrix_travel_time(){
         travel_time.push_back(std::vector<int>());
         for(int j=0; j<destination.size(); j++){
             std::vector<Road*>paths;
-            travel_time[i].push_back(find_shortest_path(origin[i],destination[j],paths));
+            travel_time[i].push_back(Trip_Generation::find_shortest_path(origin[i],destination[j],paths));
         }
     }
 }

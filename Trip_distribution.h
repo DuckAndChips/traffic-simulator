@@ -6,6 +6,7 @@
 #include "Buildings/Road.h"
 #include "Buildings/Residential.h"
 #include "City.h"
+#include "Traffic_Model.h"
 using namespace std;
 
 class Trip_distribution{
@@ -31,9 +32,8 @@ class Trip_distribution{
         void set_health_destination();
 
         void OD_matrix_travel_time();
-        void OD_matrix_traffic_work();
-
-        int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& paths);
+        void OD_matrix_traffic(Node::Category category);
+        
         static const int max_path{999};
 
 };
