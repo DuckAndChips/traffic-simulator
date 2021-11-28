@@ -16,6 +16,10 @@ int GoldMine::get_cost() const {
     return GoldMine::cost;
 }
 
+int GoldMine::get_attractiveness() const {
+    return GoldMine::attractiveness;
+}
+
 int GoldMine::get_revenue() const {
     return 2 * (city.get_population() + number_neighboring_population());
 }
