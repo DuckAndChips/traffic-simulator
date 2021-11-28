@@ -14,7 +14,6 @@ SOURCES += \
     City.cpp \
     buildings/Apartment.cpp \
     buildings/Avenue.cpp \
-    buildings/Building.cpp \
     buildings/Clinic.cpp \
     buildings/GoldMine.cpp \
     buildings/Health.cpp \
@@ -33,10 +32,8 @@ SOURCES += \
 
 HEADERS += \
     City.h \
-    buildings/AllBuildings.h \
     buildings/Apartment.h \
     buildings/Avenue.h \
-    buildings/Building.h \
     buildings/BuildingInformationFormatString.h \
     buildings/Clinic.h \
     buildings/GoldMine.h \
