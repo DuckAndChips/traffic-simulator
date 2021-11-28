@@ -5,6 +5,7 @@
 class Clinic: public Health {
 public:
     static const int cost{50};
+    static const int attractiveness{50};
 
     explicit Clinic(City &city);
     virtual Node::Type get_type() const override;
