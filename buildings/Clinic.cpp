@@ -15,6 +15,10 @@ int Clinic::get_cost() const {
     return Clinic::cost;
 }
 
+int Clinic::get_attractiveness() const {
+    return Clinic::attractiveness;
+}
+
 int Clinic::get_population_growth_rate_contribution() const {
     return 60 / (1 + number_neighboring_health_buildings());
 }
