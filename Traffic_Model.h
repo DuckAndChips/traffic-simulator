@@ -28,6 +28,8 @@ using namespace std;
  * Step 4: Trip_Assignment class in this file
  */
 
+class City;
+
 /**
  * Trip_Distribution is a class that perform the second step of the sequential demand focasting model.
  * 

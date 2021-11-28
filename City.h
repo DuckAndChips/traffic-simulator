@@ -91,11 +91,12 @@ public:
     
 
 private:
-    Node ***grid;
+    
     int grid_size;
     int budget;
     int turn;
 
+    Node ***grid;
     vector<Residential*> all_residential_buildings;
     vector<Revenue*> all_revenue_buildings;
     vector<Health*> all_health_buildings;

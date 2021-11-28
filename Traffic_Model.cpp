@@ -334,9 +334,8 @@ void Trip_Assignment::trip_assignment_main(){
 
     /// loops
     for(int i = 0; i < origin.size(); ++i){
-        if(origin[i] == nullptr) continue;
         for(int j = 0; j < destination.size(); ++j){
-            if(destination[j] == nullptr) continue;
+            if(origin[i] == nullptr || destination[j] == nullptr) continue;
             int trips = OD_Matrix[i][j];
             if(trips == 0) continue;
             std::vector<std::vector<Road*>> paths = get_all_paths(origin[i], destination[j]);
