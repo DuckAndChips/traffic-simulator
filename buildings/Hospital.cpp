@@ -15,6 +15,10 @@ int Hospital::get_cost() const {
     return Hospital::cost;
 }
 
+int Hospital::get_attractiveness() const {
+    return Hospital::attractiveness;
+}
+
 int Hospital::get_population_growth_rate_contribution() const {
     return 360 / (1 + number_neighboring_health_buildings());
 }
