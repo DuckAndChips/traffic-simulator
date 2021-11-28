@@ -49,7 +49,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Simple City</string>
+           <string>Traffic Simulator</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -227,14 +227,28 @@
     <item>
      <widget class="QLabel" name="label_ack">
       <property name="text">
-       <string>Code and UI design by COMP2012H Teaching Team</string>
+       <string>COMP2012H Group Project by TSE, Hoi Chun; LUK, Pak Him; MOK, Nga Yiu; YIN, Junyu</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Modified from COMP2012H PA4 (Simple City), which original code and UI design are by COMP2012H Teaching Team</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Building icons / images by pixel32@opengameart.org ( https://opengameart.org/content/pixel-city-municipal-buildings )</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_ack2">
       <property name="text">
-       <string>Building icons / images by pixel32@opengameart.org ( https://opengameart.org/content/pixel-city-municipal-buildings )</string>
+       <string>Avenue &amp; Street images modified by TSE, Hoi Chun, with original images from KUBI Games (https://kubigames.itch.io/road-tiles)</string>
       </property>
      </widget>
     </item>

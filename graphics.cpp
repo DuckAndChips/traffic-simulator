@@ -268,17 +268,26 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         case MainWindow::OverlayButton::NORMAL:
             break;
         case MainWindow::OverlayButton::ROAD:{      
-        /*********************************************************************************************
-            Changing the grid cell color into dark green / yellow / red according to the traffic flow 
-            Note : Only Avenue / Street will change the color. 
-        **********************************************************************************************/
-        /* for (int x = 0; x < grid_size; x++) {
+        /***********************************************************************************************
+         *   Changing the grid cell color into dark green / yellow / red according to the traffic flow *
+         *   Note : Only Avenue / Street will change the color.                                        *
+         ***********************************************************************************************/
+        for (int x = 0; x < grid_size; x++) {
             for (int y = 0; y < grid_size; y++) {
-                if (city->get_at(x, y)->get_category() == Node::Type::Road) {       // Actual condition : Act on Road Type cell
-                //if (!city->is_empty_at(x, y)){                                    // For testing : This will act on cell with buildings
+                if (city->get_at(x, y)->get_category() == Node::Category::ROAD) {       // Actual condition : Act on Road Type cell
+                //if (!city->is_empty_at(x, y)){                                        // For testing : This will act on cell with buildings
                     QBrush brush;
-                    int testingCon = city->get_at(x,y)->get_traffic_flow();         // Actual condition : Get traffic flow
-                    //int testingCon = 9;                                           // For Testing : This will make all cell in dark green
+                    int testingCon = 0;
+                    /**************************************************************************************
+                     * Dynamically cast the pointer from Pointer to Node into Pointer to Avenue / Street  *
+                     * In order to access the member function get_traffic_flow()                          *
+                     **************************************************************************************/
+                    if (city->get_at(x, y)->get_type() == Node::Type::AVENUE){
+                        testingCon = dynamic_cast<Avenue*>(city->get_at(x,y))->get_traffic_flow();
+                    }
+                    if (city->get_at(x, y)->get_type() == Node::Type::STREET){
+                        testingCon = dynamic_cast<Street*>(city->get_at(x,y))->get_traffic_flow();
+                    }
                     if (testingCon < 10){
                         //grid cell changed to dark green
                         brush.setColor(QColor::fromRgbF(0, 0.4, 0.2, 0.8f));
@@ -293,7 +302,7 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                     fillRect(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100, brush);
                 }
             }
-        } */
+        }
         break;
     }
         case MainWindow::OverlayButton::TYPE: {
@@ -302,6 +311,9 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                     if (!city->is_empty_at(x, y)) {
                         QBrush brush;
                         switch (city->get_at(x, y)->get_category()) {
+                            case Node::Category::ROAD:
+                                // No need to set color since the street / avenue occupied whole cell area.
+                                break;
                             case Node::Category::RESIDENTIAL:
                                 brush.setColor(QColor::fromRgbF(0, 0, 1, 0.8f));
                                 break;

@@ -21,6 +21,7 @@ class Trip_distribution{
         std::vector<vector<int>> travel_time;
         std::vector<vector<int>> OD_matrix_number_of_trips;
         City& city;
+        Trip_Generation trip_generation;
     public:
         explicit Trip_distribution(City& city);
         void set_all_residential();
