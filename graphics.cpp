@@ -264,22 +264,26 @@ void GameWidget::paintEvent(QPaintEvent* event) {
     switch (dynamic_cast<MainWindow *>(window())->get_selected_overlay_button()) {
         case MainWindow::OverlayButton::NORMAL:
             break;
-        case MainWindow::OverlayButton::ROAD:{
+        case MainWindow::OverlayButton::ROAD:{      
+        /*********************************************************************************************
+            Changing the grid cell color into dark green / yellow / red according to the traffic flow 
+            Note : Only Avenue / Street will change the color. 
+        **********************************************************************************************/
         /* for (int x = 0; x < grid_size; x++) {
             for (int y = 0; y < grid_size; y++) {
-                if (city->get_at(x, y)->get_category() == Node::Type::Road) { // Actual condition : Act on Road Type cell
-                //if (!city->is_empty_at(x, y)){  // For testing : This will act on cell with buildings
+                if (city->get_at(x, y)->get_category() == Node::Type::Road) {       // Actual condition : Act on Road Type cell
+                //if (!city->is_empty_at(x, y)){                                    // For testing : This will act on cell with buildings
                     QBrush brush;
-                    int testingCon = city->get_at(x,y)->get_traffic_flow;        // Actual condition : Get traffic flow
-                    //int testingCon = 9;            // For Testing : This will make all cell in dark green
+                    int testingCon = city->get_at(x,y)->get_traffic_flow();         // Actual condition : Get traffic flow
+                    //int testingCon = 9;                                           // For Testing : This will make all cell in dark green
                     if (testingCon < 10){
-                        //dark green
+                        //grid cell changed to dark green
                         brush.setColor(QColor::fromRgbF(0, 0.4, 0.2, 0.8f));
                     }else if (testingCon < 20){
-                        //yellow
+                        //grid cell changed to yellow
                         brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
                     }else {
-                        //red
+                        //grid cell changed to red
                         brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
                     }
                     brush.setStyle(Qt::SolidPattern);
@@ -289,8 +293,6 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         } */
         break;
     }
-
-
         case MainWindow::OverlayButton::TYPE: {
             for (int x = 0; x < grid_size; x++) {
                 for (int y = 0; y < grid_size; y++) {
