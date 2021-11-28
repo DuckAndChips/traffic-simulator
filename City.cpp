@@ -336,11 +336,11 @@ bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
             break;
         }
         case Node::Type::STREET: {
-            building = new Street(*this);
+            building = new Street{*this};
             break;
         }
         case Node::Type::AVENUE: {
-            building = new Avenue(*this);
+            building = new Avenue{*this};
             break;
         }
     }

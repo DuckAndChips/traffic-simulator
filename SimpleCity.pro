@@ -13,15 +13,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     City.cpp \
     buildings/Apartment.cpp \
+    buildings/Avenue.cpp \
     buildings/Building.cpp \
     buildings/Clinic.cpp \
     buildings/GoldMine.cpp \
     buildings/Health.cpp \
     buildings/Hospital.cpp \
     buildings/House.cpp \
+    buildings/Node.cpp \
     buildings/Residential.cpp \
     buildings/Revenue.cpp \
+    buildings/Road.cpp \
     buildings/SilverMine.cpp \
+    buildings/Street.cpp \
     graphics.cpp \
     main_gui.cpp \
     mainwindow.cpp \
@@ -31,6 +35,7 @@ HEADERS += \
     City.h \
     buildings/AllBuildings.h \
     buildings/Apartment.h \
+    buildings/Avenue.h \
     buildings/Building.h \
     buildings/BuildingInformationFormatString.h \
     buildings/Clinic.h \
@@ -38,9 +43,12 @@ HEADERS += \
     buildings/Health.h \
     buildings/Hospital.h \
     buildings/House.h \
+    buildings/Node.h \
     buildings/Residential.h \
     buildings/Revenue.h \
+    buildings/Road.h \
     buildings/SilverMine.h \
+    buildings/Street.h \
     graphics.h \
     mainwindow.h \
     menuwindow.h
