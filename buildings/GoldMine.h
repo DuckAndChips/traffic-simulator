@@ -10,6 +10,7 @@ public:
     explicit GoldMine(City &city);
     virtual Node::Type get_type() const override;
     virtual int get_cost() const override;
+    virtual int get_attractiveness() const override;
 
     virtual int get_revenue() const override;
 
