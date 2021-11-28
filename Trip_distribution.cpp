@@ -61,9 +61,10 @@ void Trip_distribution::set_origin(){
 }
 
 void Trip_distribution::set_work_destination(){
-    all_destination_building = static_cast<std::vector<Node*>>(all_revenue_building);
+    // all_destination_building = static_cast<std::vector<Node*>>(all_revenue_building);
     for(std::vector<Revenue*>::iterator i = all_revenue_building.begin(); i != all_revenue_building.end(); i++){
         Revenue* revenue = *i;
+        all_destination_building.push_back(static_cast<Node*>(revenue));
         if(revenue->is_neighbor_road(Node::Direction::NORTH) == true){
             destination.push_back(static_cast<Road*>(revenue->get_neighboring_node(Node::Direction::NORTH)));
         }
@@ -80,9 +81,10 @@ void Trip_distribution::set_work_destination(){
 }
 
 void Trip_distribution::set_health_destination(){
-    all_destination_building = static_cast<std::vector<Node*>>(all_health_building);
+    // all_destination_building = static_cast<std::vector<Node*>>(all_health_building);
     for(std::vector<Health*>::iterator i = all_health_building.begin(); i != all_health_building.end(); i++){
         Health* health = *i;
+        all_destination_building.push_back(static_cast<Node*>(health));
         if(health->is_neighbor_road(Node::Direction::NORTH) == true){
             destination.push_back(static_cast<Road*>(health->get_neighboring_node(Node::Direction::NORTH)));
         }
@@ -104,13 +106,15 @@ void Trip_distribution::OD_matrix_travel_time(){
         travel_time.push_back(std::vector<int>());
         for(int j=0; j<destination.size(); j++){
             std::vector<Road*>paths;
-            travel_time[i].push_back(Trip_Generation::find_shortest_path(origin[i],destination[j],paths));
+            travel_time[i].push_back(trip_generation.find_shortest_path(origin[i],destination[j],paths));
         }
     }
 }
 
 void Trip_distribution::OD_matrix_traffic(Node::Category category){
-    for(int i1=0; i1< all_residential_building.size(); i1++){
+    // std::vector<std::vector<int>>::iterator i2 = travel_time.begin();
+    // std::vector<Residential*>::iterator i1 = all_residential_building.begin()
+    for(int i1 = 0; i1 < all_residential_building.size(); i1++){
         OD_matrix_number_of_trips.push_back(std::vector<int>());
 
         float sum_travel_time = 0;
