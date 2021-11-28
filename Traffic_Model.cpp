@@ -161,6 +161,7 @@ void Trip_Distribution::set_factor_and_OD_path(){
             if(origin[i] == nullptr || destination[j] == nullptr){
                 factors[i].push_back(0);
                 OD_path[i].push_back(vector<Road*>());
+                continue;
             }
             float dist = find_shortest_path(origin[i],destination[j],path);
             if(dist >= max_path){
