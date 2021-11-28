@@ -4,8 +4,8 @@
 * If you guys also don't know how to solve then I'll just handle it using some stupid method (recreate a new file) later
 */
 
-#ifndef BUILDING_H
-#define BUILDING_H
+#ifndef NODE_H
+#define NODE_H
 
 #include <string>
 
@@ -85,4 +85,4 @@ private:
     Node* neighboring_nodes[4]{};
 };
 
-#endif // BUILDING_H
+#endif // NODE_H
