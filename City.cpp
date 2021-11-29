@@ -529,6 +529,7 @@ void City::set_budget(int newbud){
 }
 
 void City::set_all_residential(){
+    all_residential_buildings.clear();
     for(int i=0; i<grid_size; ++i){
         for(int j=0; j<grid_size; ++j){
             if(grid[i][j] != nullptr){
@@ -541,6 +542,7 @@ void City::set_all_residential(){
 }
 
 void City::set_all_revenue(){
+    all_revenue_buildings.clear();
     for(int i=0; i<grid_size; ++i){
         for(int j=0; grid_size; ++j){
             if(grid[i][j] != nullptr){
@@ -553,6 +555,7 @@ void City::set_all_revenue(){
 }
 
 void City::set_all_health(){
+    all_health_buildings.clear();
     for(int i=0; i<grid_size; ++i){
         for(int j=0; j<grid_size; ++j){
             if(grid[i][j] != nullptr){
