@@ -40,7 +40,7 @@ int Clinic::get_attractiveness() const {
 /** Get the population growth rate contribution of the Clinic
  * 
  * Calculate the population growth rate contribution of the clinic by the following:
- * 60 / (1 + number_neighboring_health_buildings()
+ * 60 / (1 + number_neighboring_health_buildings())
  * 
  * @return The calculated population growth rate contribution 
  */
