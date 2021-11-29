@@ -2,6 +2,14 @@
 #define HOUSE_H
 
 #include "Residential.h"
+
+/**
+ * House class
+ * 
+ * This class holds information and methods for House nodes in the city grid.
+ * This class inherits the Residential class, which inherits the Node class.
+ * 
+ */
 class House: public Residential {
 public:
     static const int cost{50};
