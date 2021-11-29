@@ -5,16 +5,38 @@
 
 using namespace std;
 
+/* * Construct a Avenue
+ * 
+ * Calls constructor for a Avenue object.
+ * 
+ * @param city A reference to the current city.
+ * */
 Avenue::Avenue(City &city): Road(city) {}
 
+/** Get the Node type of the Avenue
+ * 
+ * @return A Node::Type::AVENUE enum value of Node::Type.
+ */
 Node::Type Avenue::get_type() const{
     return Node::Type::AVENUE;
 }
 
+/** Get the cost of building a Avenue
+ * 
+ * @return The const data member that holds the cost
+ */
 int Avenue::get_cost() const{
     return cost;
 }
 
+/** Get a long version of a string that contains information about the Avenue
+ * 
+ * Returns a string that contains information including the maximum traffic
+ * flow, traffic flow, and travel time. 
+ * Calculations of these items are also included in the string.
+ * 
+ * @return Long version of the string of information about the Avenue
+ */
 std::string Avenue::get_long_information() const{
     ostringstream out;
     out << AVENUE_HEADER << endl;
@@ -26,6 +48,14 @@ std::string Avenue::get_long_information() const{
     return out.str();
 }
 
+/** Get a short version of a string that contains information about the Avenue
+ * 
+ * Returns a string that contains information including the maximum traffic
+ * flow, traffic flow, and travel time. 
+ * Calculations of these items are also included in the string.
+ * 
+ * @return Short version of the string of information about the Avenue
+ */
 std::string Avenue::get_short_information() const{
     ostringstream out;
     out << AVENUE_HEADER << endl;
@@ -36,6 +66,10 @@ std::string Avenue::get_short_information() const{
     return out.str();
 }
 
+/** Get the maximum traffic flow of the Avenue
+ * 
+ * @return The const data member that holds the maximum traffic flow
+ */
 double Avenue::get_max_traffic_flow() const{
     return max_traffic_flow;
 }
