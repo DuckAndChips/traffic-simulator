@@ -19,6 +19,7 @@ GameWidget::GameWidget(QWidget* parent) :
     scroll_x(0), scroll_y(0),
     scale(1.0f),
     UP(false), DOWN(false), LEFT(false), RIGHT(false),
+    god_mode(false),       // In default, god mode should not be activated
     tick(0),
     hovering_grid_x(-1), hovering_grid_y(-1)
 {
@@ -52,6 +53,11 @@ void GameWidget::keyPressEvent(QKeyEvent* event) {
     case Qt::Key::Key_D:
         RIGHT = true;
         break;
+    // When Key 'B' is pressed, god mode activates and set budget to 99999.
+    case Qt::Key::Key_B:
+        god_mode = true;
+        city->set_budget(99999);
+        break;
     }
 }
 
@@ -68,6 +74,10 @@ void GameWidget::keyReleaseEvent(QKeyEvent* event) {
         break;
     case Qt::Key::Key_D:
         RIGHT = false;
+        break;
+    // When key 'B' is realized, god mode deactivated
+    case Qt::Key::Key_B:
+        god_mode = false;
         break;
     }
 }
