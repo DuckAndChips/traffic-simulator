@@ -544,7 +544,7 @@ void City::set_all_residential(){
 void City::set_all_revenue(){
     all_revenue_buildings.clear();
     for(int i=0; i<grid_size; ++i){
-        for(int j=0; grid_size; ++j){
+        for(int j=0; j<grid_size; ++j){
             if(grid[i][j] != nullptr){
                 if(grid[i][j]->get_category() == Node::Category::REVENUE){
                     all_revenue_buildings.push_back(dynamic_cast<Revenue*>(grid[i][j]));
