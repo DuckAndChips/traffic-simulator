@@ -90,7 +90,9 @@ public:
     inline void set_home_health_beta_0 (float beta)  {home_health_beta_0 = beta;}
     inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
     
-
+    // For Demo Purpose, set the city's budget into newbudget
+    void set_budget(int newbud);
+    
 private:
     Node ***grid;
     int grid_size;
