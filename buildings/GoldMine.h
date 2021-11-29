@@ -2,6 +2,16 @@
 #define GOLDMINE_H
 
 #include "Revenue.h"
+
+/* *
+* GoldMine Class
+* 
+* This class holds information and methods for GoldMine nodes in the city grid. 
+* This class inherites the Revenue class, which inherits the Node class. 
+*
+* */
+
+
 class GoldMine: public Revenue {
 public:
     static const int cost{400};
