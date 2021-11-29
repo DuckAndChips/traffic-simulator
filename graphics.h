@@ -71,6 +71,10 @@ private:
 
     // Keys pressed
     bool UP, DOWN, LEFT, RIGHT;
+    
+    // Keys pressed for god mode, indicated whether the program is in god mode or not
+    // For demo purpose, god mode allows change city's budget into 99999 when activated
+    bool god_mode;
 
     int tick; // City ticks (number of calls of loop function) elapsed since the beginning of the program
     // Used for animating blinking effects
