@@ -30,7 +30,7 @@ SOURCES += \
     mainwindow.cpp \
     menuwindow.cpp \
     Trip_distribution.cpp \
-    Traffic_Model.cpp
+    Trip_Assignment.cpp
 
 HEADERS += \
     City.h \
@@ -52,7 +52,7 @@ HEADERS += \
     mainwindow.h \
     menuwindow.h \
     Trip_distribution.h \
-    Traffic_Model.h
+    Trip_Assignment.h
 
 FORMS += \
     mainwindow.ui \
