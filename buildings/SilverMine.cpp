@@ -24,6 +24,14 @@ int SilverMine::get_revenue() const {
     return city.get_population() + number_neighboring_population();
 }
 
+int SilverMine::get_revenue_per_worker() const{
+    return revenue_per_worker;
+}
+
+void SilverMine::set_revenue_per_worker(int r){
+    revenue_per_worker = r;
+}
+
 string SilverMine::get_long_information() const {
     ostringstream out;
     out << SILVER_HEADER << endl;
