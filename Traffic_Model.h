@@ -4,7 +4,7 @@
 #include "buildings/GoldMine.h"
 #include "buildings/House.h"
 #include "buildings/Apartment.h"
-#include "Node.h"
+#include "buildings/Node.h"
 #include "buildings/Road.h"
 
 #include <vector>
