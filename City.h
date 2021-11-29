@@ -47,12 +47,15 @@ public:
     int get_turn() const;
     int get_budget() const;
     int get_grid_size() const;
-
-    int get_revenue() const;
     int get_population() const;
     int get_max_population() const;
     int get_population_growth() const;
     int get_population_growth_rate() const;
+
+    /// Functions that set the three vector data member containing all buildings in specific catagories 
+    void set_all_residential();
+    void set_all_revenue();
+    void set_all_health();
 
     Node *get_at(const Coordinates &coordinates) const;
     bool is_empty_at(const Coordinates &coordinates) const;
@@ -83,7 +86,7 @@ public:
         return demolish_at(Coordinates{x, y});
     };
 
-    /// Functions that deal with regression coefficients
+    /// Functions that deal with regression coefficients and return revenue 
     inline float get_home_work_beta_0 () const {return home_work_beta_0;}
     inline float get_home_work_beta_1 () const{return home_work_beta_1;}
     inline float get_home_health_beta_0 () const{return home_health_beta_0;}
@@ -92,8 +95,9 @@ public:
     inline void set_home_work_beta_1 (float beta)  {home_work_beta_1 = beta;}
     inline void set_home_health_beta_0 (float beta)  {home_health_beta_0 = beta;}
     inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
+    inline int  get_revenue() const {return revenue;}
     
-    /// God Mode: set the city's budget into newbudget
+    /// God Mode: set the city's budget into newbud
     void set_budget(int newbud);
 
 private:
@@ -101,6 +105,7 @@ private:
     int grid_size;
     int budget;
     int turn;
+    int revenue; 
 
     vector<Residential*> all_residential_buildings;
     vector<Revenue*> all_revenue_buildings;

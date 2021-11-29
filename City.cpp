@@ -3,7 +3,7 @@
 
 using namespace std;
 
-City::City(int size): grid_size(size), budget(150), turn(1) {
+City::City(int size): grid_size(size), budget(200), turn(1) {
     grid = new Node **[size];
     for (int x = 0; x < size; x++) {
         grid[x] = new Node *[size];
@@ -31,43 +31,31 @@ City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
             if (type >= 1 && type <= 8) {
                 switch (static_cast<Node::Type>(type)) {
                     case Node::Type::CLINIC: {
-                        Clinic* c = new Clinic{*this};
-                        grid[x][y] = c;
-                        all_health_buildings.push_back(c);
+                        grid[x][y] = new Clinic{*this};
                         break;
                     }
                     case Node::Type::HOSPITAL: {
-                        Hospital* hp = new Hospital{*this};
-                        grid[x][y] = hp;
-                        all_health_buildings.push_back(hp);
+                        grid[x][y] = new Hospital{*this};
                         break;
                     }
                     case Node::Type::SILVER_MINE: {
-                        SilverMine* sm = new SilverMine{*this};
-                        grid[x][y] = sm;
-                        all_revenue_buildings.push_back(sm);
+                        grid[x][y] = new SilverMine{*this};
                         break;
                     }
                     case Node::Type::GOLD_MINE: {
-                        GoldMine* gm = new GoldMine{*this};
-                        grid[x][y] = gm;
-                        all_revenue_buildings.push_back(gm);
+                        grid[x][y] = new GoldMine{*this};
                         break;
                     }
                     case Node::Type::HOUSE: {
                         int population;
                         input >> population;
-                        House* h = new House{*this, population};
-                        grid[x][y] = h;
-                        all_residential_buildings.push_back(h);
+                        grid[x][y] = new House{*this, population};
                         break;
                     }
                     case Node::Type::APARTMENT: {
                         int population;
                         input >> population;
-                        Apartment* ap = new Apartment{*this, population};
-                        grid[x][y] = ap;
-                        all_residential_buildings.push_back(ap);
+                        grid[x][y] = new Apartment{*this, population};
                         break;
                     }
                     case Node::Type::STREET: {
@@ -169,18 +157,6 @@ int City::get_budget() const {
 
 int City::get_grid_size() const {
     return grid_size;
-}
-
-int City::get_revenue() const {
-    int revenue = 0;
-    for (int x = 0; x < grid_size; x++) {
-        for (int y = 0; y < grid_size; y++) {
-            if (grid[x][y] != nullptr) {
-                revenue += grid[x][y]->get_revenue();
-            }
-        }
-    }
-    return revenue;
 }
 
 int City::get_population() const {
@@ -300,39 +276,26 @@ bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
     Node *building;
     switch (type) {
         case Node::Type::CLINIC: {
-            Clinic* c = new Clinic{*this};
-            all_health_buildings.push_back(c);
-            building = c;                           /// potential source of error here 
+            building = new Clinic{*this};
             break;
         }
         case Node::Type::HOSPITAL: {
-            Hospital* hp = new Hospital{*this};
-            building = hp;
-            all_health_buildings.push_back(hp);
+            building = new Hospital{*this};
             break;
         }
         case Node::Type::SILVER_MINE: {
-            SilverMine* sm = new SilverMine{*this};
-            building = sm;
-            all_revenue_buildings.push_back(sm);
+            building = new SilverMine{*this};
             break;
         }
         case Node::Type::GOLD_MINE: {
-            GoldMine* gm = new GoldMine{*this};
-            building = gm;
-            all_revenue_buildings.push_back(gm);
             break;
         }
         case Node::Type::HOUSE: {
-            House* h = new House{*this, 0};
-            building = h;
-            all_residential_buildings.push_back(h);
+            building = new House{*this, 10};
             break;
         }
         case Node::Type::APARTMENT: {
-            Apartment* ap = new Apartment{*this, 0};
-            building = ap;
-            all_residential_buildings.push_back(ap);
+            building = new Apartment{*this, 20};
             break;
         }
         case Node::Type::STREET: {
@@ -394,33 +357,12 @@ bool City::demolish_at(const City::Coordinates &coordinates) {
         return false;
 
     Node *building = grid[coordinates.x][coordinates.y];
-    switch (building->get_category())
-    {
-    case Node::Category::HEALTH: {
-        vector<Health*>::iterator h = find(all_health_buildings.begin(),all_health_buildings.end(),building); /// potential source of error
-        all_health_buildings.erase(h);
-        break;
-    }
-    case Node::Category::RESIDENTIAL: {
-        vector<Residential*>::iterator p = find(all_residential_buildings.begin(),all_residential_buildings.end(),building); /// potential source of error
-        all_residential_buildings.erase(p);
-        break;
-    }
-    case Node::Category::REVENUE: {
-        vector<Revenue*>::iterator r = find(all_revenue_buildings.begin(),all_revenue_buildings.end(),building); /// potential source of error
-        all_revenue_buildings.erase(r);
-        break;
-    }
-    default:
-        break;
-    }
 
     // Set neighboring buildings
     if (coordinates.x > 0) {
         Node *neighbor = get_at(coordinates.x - 1, coordinates.y);
         if (neighbor) {
             neighbor->set_neighboring_node(Node::Direction::EAST,nullptr);
-            // building->deregister_neighboring_building(neighbor);
         }
     }
 
@@ -428,7 +370,6 @@ bool City::demolish_at(const City::Coordinates &coordinates) {
         Node *neighbor = get_at(coordinates.x + 1, coordinates.y);
         if (neighbor) {
             neighbor->set_neighboring_node(Node::Direction::WEST,nullptr);
-            // building->deregister_neighboring_building(neighbor);
         }
     }
 
@@ -436,7 +377,6 @@ bool City::demolish_at(const City::Coordinates &coordinates) {
         Node *neighbor = get_at(coordinates.x, coordinates.y - 1);
         if (neighbor) {
             neighbor->set_neighboring_node(Node::Direction::NORTH,nullptr);
-            // building->deregister_neighboring_building(neighbor);
         }
     }
 
@@ -444,7 +384,6 @@ bool City::demolish_at(const City::Coordinates &coordinates) {
         Node *neighbor = get_at(coordinates.x, coordinates.y + 1);
         if (neighbor) {
             neighbor->set_neighboring_node(Node::Direction::SOUTH,nullptr);
-            // building->deregister_neighboring_building(neighbor);
         }
     }
 
@@ -482,6 +421,11 @@ void City::move_to_next_turn() {
     /// Thirdly, we create 2 Trip_Distribution objects to handle home work trips and home health trips respectively
     /// If Trip_Distribution objects can done their works successfully, we call the Trip_Assignment object to assign traffic to
     /// the road network
+
+    set_all_health();
+    set_all_residential();
+    set_all_revenue();
+
     Trip_Distribution home_work_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
     if(home_work_trip.trip_distribution_main(Node::Category::REVENUE)){
        trip_assignment.set_Traffic_Model(
@@ -499,20 +443,55 @@ void City::move_to_next_turn() {
     }
 
     /**
-        * Compute revenue 
+        * Assign working population to each revenue buildings and compute city's revenue:
+        * Revenue of each Revenue buildings = no. of trips to that building * Revenue of that buildings
         */
 
-    budget += get_revenue();
+    revenue = 0;
+    for (unsigned int i = 0; i < all_revenue_buildings.size(); ++i){
+        int no_of_trips = 0;
+        for (unsigned int j=0; j < home_work_trip.OD_matrix.size(); ++j){
+            no_of_trips += home_work_trip.OD_matrix[j][i];
+        }
+        all_revenue_buildings[i]->set_working_population(no_of_trips);
+        revenue += all_revenue_buildings[i]->get_revenue_per_worker() * no_of_trips;
+    }
+
+    budget += revenue;
 
     /**
-        * Adjust population of the tile according to the change in population of the tile
-        * Note that the change in population itself alters the population growth rate,
-        * which in turn affects the change in population.
-        *
-        * Therefore we first save the change in populations in a tile in a separate array,
-        * and then we apply the adjustments.
+        * Assign population change to each revenue buildings:
+        * if (travel time <= 10.5)
+        *   population growth rate = no. of trips to health buildings / travel time to building 
+        * if (10.5 <= travel time <= 11)
+        *   population growth rate = no. of trips to health buildings / travel time to building / 10
+        * if (11 <= travel time <= 15)
+        *   population growth rate = no. of trips to health buildings / travel time to building / 100
+        * if (travel time > 15 mins)
+        *   population growth rate = - no. of trips to health buildings / travel time to building / 10
+        * population change = current population * population growth
         */
 
+    for (unsigned int i = 0; i < all_revenue_buildings.size(); ++i){
+        float growth_rate = 0.0f;
+        for(unsigned int j = 0; j < all_health_buildings.size(); ++j){
+            vector<Road*> path = home_health_trip.OD_path[i][j];
+            if(!path.empty()){
+                float travel_time = trip_assignment.get_travel_time(path);
+                if(travel_time <= 10.5f)
+                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path));
+                else if(travel_time <= 11.0f)
+                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
+                else if(travel_time <= 15.0f)
+                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
+                else growth_rate -= (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
+            }    
+        }
+        all_revenue_buildings[i]->increase_population(all_revenue_buildings[i]->get_population()*growth_rate);
+    }
+
+
+    /** original implementation of population change in PA3
     int** population_change = new int* [grid_size];
     for (int x = 0; x < grid_size; x++) {
         population_change[x] = new int[grid_size];
@@ -534,15 +513,54 @@ void City::move_to_next_turn() {
             }
         }
     }
+    
 
     // Remember to free the memory
     for (int x = 0; x < grid_size; x++) {
         delete[] population_change[x];
     }
     delete[] population_change;
+    */
 }
 
 void City::set_budget(int newbud){
     if (newbud < 0){return;}
     budget = newbud;
 }
+
+void City::set_all_residential(){
+    for(int i=0; i<grid_size; ++i){
+        for(int j=0; j<grid_size; ++j){
+            if(grid[i][j] != nullptr){
+                if(grid[i][j]->get_category() == Node::Category::RESIDENTIAL){
+                    all_residential_buildings.push_back(dynamic_cast<Residential*>(grid[i][j]));
+                }
+            }
+        }
+    }
+}
+
+void City::set_all_revenue(){
+    for(int i=0; i<grid_size; ++i){
+        for(int j=0; grid_size; ++j){
+            if(grid[i][j] != nullptr){
+                if(grid[i][j]->get_category() == Node::Category::REVENUE){
+                    all_revenue_buildings.push_back(dynamic_cast<Revenue*>(grid[i][j]));
+                }
+            }
+        }
+    }
+}
+
+void City::set_all_health(){
+    for(int i=0; i<grid_size; ++i){
+        for(int j=0; j<grid_size; ++j){
+            if(grid[i][j] != nullptr){
+                if(grid[i][j]->get_category() == Node::Category::HEALTH){
+                    all_health_buildings.push_back(dynamic_cast<Health*>(grid[i][j]));
+                }
+            }
+        }
+    }
+}
+
