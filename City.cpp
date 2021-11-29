@@ -460,28 +460,48 @@ void City::move_to_next_turn() {
     /**
         * Handle traffic first
         */
+
+    /// First, we reset all the traffic on the road to zero
+
+    for (int i = 0; i < grid_size; ++i){
+        for (int j = 0; j < grid_size; ++j){
+            if(grid[i][j] != nullptr){
+                if(grid[i][j]->get_category() == Node::Category::ROAD){
+                    Road* p = dynamic_cast<Road*>(grid[i][j]);
+                    p->set_traffic_flow(0);
+                }
+            }
+        }
+    }
+
+    /// Then, we creat a Trip_Assignment object with dummy refrence passed to it
     std::vector<Road*> dummy_r;
     std::vector<std::vector<int>> dummy_od;
-    Trip_Assignment home_work_trip_assignment(*this,dummy_r,dummy_r,dummy_od);
-    Trip_Assignment home_health_trip_assignment(*this,dummy_r,dummy_r,dummy_od);
+    Trip_Assignment trip_assignment(*this,dummy_r,dummy_r,dummy_od);
 
+    /// Thirdly, we create 2 Trip_Distribution objects to handle home work trips and home health trips respectively
+    /// If Trip_Distribution objects can done their works successfully, we call the Trip_Assignment object to assign traffic to
+    /// the road network
     Trip_Distribution home_work_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
     if(home_work_trip.trip_distribution_main(Node::Category::REVENUE)){
-        home_work_trip_assignment.set_Traffic_Model(
+       trip_assignment.set_Traffic_Model(
             home_work_trip.origin, home_work_trip.destination, home_work_trip.OD_matrix
         );
+        trip_assignment.trip_assignment_main();
     }
 
     Trip_Distribution home_health_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
     if(home_health_trip.trip_distribution_main(Node::Category::HEALTH)){
-        home_health_trip_assignment.set_Traffic_Model(
+        trip_assignment.set_Traffic_Model(
             home_health_trip.origin, home_health_trip.destination, home_health_trip.OD_matrix
         );
+        trip_assignment.trip_assignment_main();
     }
 
     /**
         * Compute revenue 
         */
+
     budget += get_revenue();
 
     /**
@@ -520,10 +540,4 @@ void City::move_to_next_turn() {
         delete[] population_change[x];
     }
     delete[] population_change;
-}
-
-// For demo purpose, set city's budget to newbudge 
-void City::set_budget(int newbud){
-    if (newbud < 0){return;}
-    budget = newbud;
 }

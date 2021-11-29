@@ -13,7 +13,8 @@
 #include "buildings/Apartment.h"
 #include "buildings/Street.h"
 #include "buildings/Avenue.h"
-#include "Traffic_Model.h"
+#include "Trip_Distribution.h"
+#include "Trip_Assignment.h"
 
 #include <string>
 #include <ostream>
@@ -22,7 +23,9 @@
 using namespace std;
 
 class City {
-    friend class Trip_distribution;
+    friend class Trip_Distribution;
+    friend class Trip_Assignment;
+
 public:
     
     struct Coordinates {
@@ -90,9 +93,7 @@ public:
     inline void set_home_health_beta_0 (float beta)  {home_health_beta_0 = beta;}
     inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
     
-    // For Demo Purpose, set the city's budget into newbudget
-    void set_budget(int newbud);
-    
+
 private:
     Node ***grid;
     int grid_size;
