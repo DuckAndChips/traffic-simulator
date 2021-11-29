@@ -2,6 +2,16 @@
 #define APARTMENT_H
 
 #include "Residential.h"
+
+/* *
+* Apartment Class
+* 
+* This class holds information and methods for Apartment nodes in the city grid. 
+* This class inherites the Residential class, which inherits the Node class. 
+*
+* */
+
+
 class Apartment: public Residential {
 public:
     static const int cost{300};

@@ -2,6 +2,16 @@
 #define AVENUE_H
 
 #include "Road.h"
+
+/* *
+* Avenue Class
+* 
+* This class holds information and methods for Avenue nodes in the city grid. 
+* This class inherites the Road class, which inherits the Node class. 
+*
+* */
+
+
 class Avenue: public Road {
     public:
         static const int cost{200};
