@@ -32,7 +32,9 @@ string SilverMine::get_long_information() const {
            out << NO_ROAD_WARNING << endl;
     }
     out << SILVER_1_1 << get_revenue() << endl;
-    out << SILVER_2_1;
+    out << SILVER_2_1 << endl;
+    out << SILVER_3_1 << get_revenue_per_worker() << endl;
+    out << SILVER_4_1 << get_working_population();
 
     return out.str();
 }
@@ -44,7 +46,9 @@ string SilverMine::get_short_information() const {
        !is_neighbor_road(Node::Direction::SOUTH) && !is_neighbor_road(Node::Direction::WEST)) {
            out << NO_ROAD_WARNING << endl;
     }
-    out << SILVER_1_1 << get_revenue();
+    out << SILVER_1_1 << get_revenue() << endl;
+    out << SILVER_3_1 << get_revenue_per_worker() << endl;
+    out << SILVER_4_1 << get_working_population();
 
     return out.str();
 }

@@ -37,11 +37,15 @@ const std::string HOSPITAL_2_1 = "360 / (1 + Neighboring Health Buildings)";
 
 const std::string GOLD_HEADER = "Gold Mine";
 const std::string GOLD_1_1 = "Revenue: ";
-const std::string GOLD_2_1 = "2 * (Total Population + Neighboring Population)";
+const std::string GOLD_2_1 = "(Revenue per worker * Working population)";
+const std::string GOLD_3_1 = "Revenue per worker (constant): ";
+const std::string GOLD_4_1 = "Working population: ";
 
 const std::string SILVER_HEADER = "Silver Mine";
 const std::string SILVER_1_1 = "Revenue: ";
-const std::string SILVER_2_1 = "1 * (Total Population + Neighboring Population)";
+const std::string SILVER_2_1 = "(Revenue per worker * Working population)";
+const std::string SILVER_3_1 = "Revenue per worker (constant): ";
+const std::string SILVER_4_1 = "Working population: ";
 
 const std::string STREET_HEADER = "Street";
 const std::string AVENUE_HEADER = "Avenue";

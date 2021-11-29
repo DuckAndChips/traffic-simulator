@@ -32,7 +32,9 @@ string GoldMine::get_long_information() const {
            out << NO_ROAD_WARNING << endl;
     }
     out << GOLD_1_1 << get_revenue() << endl;
-    out << GOLD_2_1;
+    out << GOLD_2_1 << endl;
+    out << GOLD_3_1 << get_revenue_per_worker() << endl;
+    out << GOLD_4_1 << get_working_population();
 
     return out.str();
 }
@@ -44,7 +46,9 @@ string GoldMine::get_short_information() const {
            out << NO_ROAD_WARNING << endl;
     }
     out << GOLD_HEADER << endl;
-    out << GOLD_1_1 << get_revenue();
+    out << GOLD_1_1 << get_revenue() << endl;
+    out << GOLD_3_1 << get_revenue_per_worker() << endl;
+    out << GOLD_4_1 << get_working_population();
 
     return out.str();
 }

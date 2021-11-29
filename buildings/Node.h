@@ -6,6 +6,14 @@
 
 class City;
 
+/**
+ * Node class
+ * 
+ * A node can be a building or a road on the grid.
+ * Every element in the grid in City::city will point to either a nullptr or a Node object.
+ * This class holds information and methods for Nodes in the city grid.
+ * 
+ */
 class Node {
 public:
     enum class Type {
@@ -52,6 +60,8 @@ public:
     virtual int get_work_trips(); /// This functions also update the work_trips data member for a Residential object
     virtual int get_health_trips(); /// This functions also update the health_trips data member for a Residential object
     virtual int get_attractiveness() const; 
+    virtual int get_revenue_per_worker() const; 
+    virtual int get_working_population() const; 
 
     /// Functions that implement the gaming mechanism 
     virtual void increase_population(int population);
@@ -62,10 +72,7 @@ public:
     bool is_neighbor_empty(Direction direction);
     bool is_neighbor_road(Direction direcion) const; 
 
-    /** 
-     * original neighboring buildings functions in PA3/4
-     * should be modified after the implementation of the new gaming algorithm
-     */
+    // Functions that return information about neighboring buildings that will be useful for the game mechanics
     int number_neighboring_residential_buildings() const;
     int number_neighboring_health_buildings() const;
     int number_neighboring_gold_mines() const;

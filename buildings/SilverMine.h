@@ -6,6 +6,7 @@ class SilverMine: public Revenue {
 public:
     static const int cost{50};
     static const int attractiveness{2};
+    static const int revenue_per_worker{5};
 
     explicit SilverMine(City &city);
     virtual Node::Type get_type() const override;
