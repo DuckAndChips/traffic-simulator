@@ -9,8 +9,8 @@ After that, travel time matrix and number of trips matrix is generated one after
 
 #include <vector>
 #include <algorithm>
-#include "Buildings/Road.h"
-#include "Buildings/Residential.h"
+#include "buildings/Road.h"
+#include "buildings/Residential.h"
 #include "City.h"
 #include "Traffic_Model.h"
 using namespace std;

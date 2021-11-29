@@ -28,7 +28,9 @@ SOURCES += \
     graphics.cpp \
     main_gui.cpp \
     mainwindow.cpp \
-    menuwindow.cpp
+    menuwindow.cpp \
+    Trip_distribution.cpp \
+    Traffic_Model.cpp
 
 HEADERS += \
     City.h \
@@ -48,7 +50,9 @@ HEADERS += \
     buildings/Street.h \
     graphics.h \
     mainwindow.h \
-    menuwindow.h
+    menuwindow.h \
+    Trip_distribution.h \
+    Traffic_Model.h
 
 FORMS += \
     mainwindow.ui \

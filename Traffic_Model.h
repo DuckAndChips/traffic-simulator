@@ -1,3 +1,6 @@
+#ifndef TRAFFIC_MODEL_H
+#define TRAFFIC_MODEL_H
+
 #include "buildings/Clinic.h"
 #include "buildings/Hospital.h"
 #include "buildings/SilverMine.h"
@@ -85,8 +88,8 @@ class Trip_Distribution{
 
     public:
         /// Regression parameter used in gravity model
-        static const float c{1.0f};
-        static const int max_path{999};
+        static constexpr float c{1.0f};
+        static constexpr int max_path{999};
 
 
         /// constructor
@@ -142,7 +145,6 @@ class Trip_Distribution{
  * 2.   This class can MODIFY the data members in Road objects
  */
 
-
 class Trip_Assignment {
     
     private:
@@ -180,6 +182,7 @@ class Trip_Assignment {
         double get_travel_time(std::vector<Road*> &path);
 };
 
+#endif // TRAFFIC_MODEL_H
 
 
 
