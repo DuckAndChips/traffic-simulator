@@ -260,6 +260,27 @@ void tsetColor(QPainter& paint, int dcolor) {
     paint.setPen(p);
 }
 
+
+/*************************************************************************************
+ * Helper Function : Determine the color of pen according to the traffic flow amount *
+ *************************************************************************************/
+void RoadColor(QPainter& paint, int traffic) {
+    QPen p = paint.pen();
+    p.setWidth(7);
+    if (traffic < 100){
+        // if traffic flow is smaller than 100 , Change to Dark green
+        p.setColor(QColor::fromRgb(0, 102, 51));
+    }else if (traffic < 200){
+        // if traffic flow is between 100 and 200 , Change to Yellow
+        p.setColor(QColor::fromRgb(255, 255, 0));
+    }else{
+        // if traffic flow is larger than 200 , Change to Red
+        p.setColor(QColor::fromRgb(255, 0, 0));
+    }
+    paint.setPen(p);
+}
+
+
 void GameWidget::paintEvent(QPaintEvent* event) {
     QPainter paint{ this };
 
@@ -274,51 +295,84 @@ void GameWidget::paintEvent(QPaintEvent* event) {
 
     const int min = -grid_size * 50;
     const int max = grid_size * 50;// Draw special overlays on the grid
+
+    // Draw Roads on the grid
+    // Road cell icon is handled first so to allow road overlay paint can cover the road
+    for (int x = 0; x < grid_size; x++) {
+        for (int y = 0; y < grid_size; y++) {
+            if (!city->is_empty_at(x, y)) {
+                Node::Type type = city->get_at(x, y)->get_type();
+                if (type == Node::Type::STREET || type == Node::Type::AVENUE){
+                    drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
+                               get_road_icon(type, x, y));
+                }
+            }
+        }
+    }
     switch (dynamic_cast<MainWindow *>(window())->get_selected_overlay_button()) {
         case MainWindow::OverlayButton::NORMAL:
+            // In normal mode, no overlay actions required
             break;
-        case MainWindow::OverlayButton::ROAD:{      
+        case MainWindow::OverlayButton::ROAD:{
         /***********************************************************************************************
          *   Changing the grid cell color into dark green / yellow / red according to the traffic flow *
          *   Note : Only Avenue / Street will change the color.                                        *
          ***********************************************************************************************/
-        for (int x = 0; x < grid_size; x++) {
-            for (int y = 0; y < grid_size; y++) {
-                if (city->get_at(x, y)->get_category() == Node::Category::ROAD) {       // Actual condition : Act on Road Type cell
-                //if (!city->is_empty_at(x, y)){                                        // For testing : This will act on cell with buildings
-                    QBrush brush;
-                    int testingCon = 0;
-                    /**************************************************************************************
-                     * Dynamically cast the pointer from Pointer to Node into Pointer to Avenue / Street  *
-                     * In order to access the member function get_traffic_flow()                          *
-                     **************************************************************************************/
-                    if (city->get_at(x, y)->get_type() == Node::Type::AVENUE){
-                        testingCon = dynamic_cast<Avenue*>(city->get_at(x,y))->get_traffic_flow();
+            QPen original = paint.pen();
+            // Go into every suitable grid cell, which is :
+            for (int x = 0; x < grid_size; x++) {
+                for (int y = 0; y < grid_size; y++) {
+                    if (!city->is_empty_at(x, y)){                                       // Not an empty cell and,
+                        if (city->get_at(x, y)->get_category() == Node::Category::ROAD){ // is in road type
+                            int traffic_flow_num = 0;
+                            // cast the pointer from Pointer to Node into Pointer to Avenue / Street
+                            // In order to access get_traffic_flow()
+                            if (city->get_at(x, y)->get_type() == Node::Type::AVENUE){
+                                traffic_flow_num = static_cast<Avenue*>(city->get_at(x,y))->get_traffic_flow();
+                            }
+                            if (city->get_at(x, y)->get_type() == Node::Type::STREET){
+                                traffic_flow_num = static_cast<Street*>(city->get_at(x,y))->get_traffic_flow();
+                            }
+                            RoadColor(paint,traffic_flow_num);
+                            // Go through neighboring cell :
+                            // Direction  : S->W->N->E
+                            // value of i : 0  1  2  3
+                            for (int i = 0; i < 4; i++){
+                                // Check Whether neighboring cell have road type object
+                                if (!city->get_at(x, y)->is_neighbor_empty(static_cast<Node::Direction>(i))){
+                                    switch(i){
+                                        case 0: // Linked with Bottom
+                                            drawLine(paint, (x - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50,
+                                            (x - grid_size / 2) * 100 + 50, (y + 0.5 - grid_size / 2) * 100 + 50);
+                                            break;
+                                        case 1: // Linked with Left
+                                            drawLine(paint, (x - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50,
+                                             (x + 0.5 - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50);
+                                             break;
+                                        case 2: // Linked with top
+                                            drawLine(paint, (x - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50,
+                                            (x - grid_size / 2) * 100 + 50, (y - 0.5 - grid_size / 2) * 100 + 50);
+                                            break;
+                                        case 3: // Linked with Right
+                                            drawLine(paint, (x - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50,
+                                             (x - 0.5 - grid_size / 2) * 100 + 50, (y - grid_size / 2) * 100 + 50);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
                     }
-                    if (city->get_at(x, y)->get_type() == Node::Type::STREET){
-                        testingCon = dynamic_cast<Street*>(city->get_at(x,y))->get_traffic_flow();
-                    }
-                    if (testingCon < 10){
-                        //grid cell changed to dark green
-                        brush.setColor(QColor::fromRgbF(0, 0.4, 0.2, 0.8f));
-                    }else if (testingCon < 20){
-                        //grid cell changed to yellow
-                        brush.setColor(QColor::fromRgbF(1, 1, 0, 0.8f));
-                    }else {
-                        //grid cell changed to red
-                        brush.setColor(QColor::fromRgbF(1, 0, 0, 0.8f));
-                    }
-                    brush.setStyle(Qt::SolidPattern);
-                    fillRect(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100, brush);
                 }
             }
+            paint.setPen(original);
+            break;
         }
-        break;
-    }
         case MainWindow::OverlayButton::TYPE: {
             for (int x = 0; x < grid_size; x++) {
                 for (int y = 0; y < grid_size; y++) {
                     if (!city->is_empty_at(x, y)) {
+                        // if the cell is road, no action is needed, since the icon will cover the whole grid
+                        if (city->get_at(x, y)->get_category() == Node::Category::ROAD){continue;}
                         QBrush brush;
                         switch (city->get_at(x, y)->get_category()) {
                             case Node::Category::ROAD:
@@ -372,17 +426,13 @@ void GameWidget::paintEvent(QPaintEvent* event) {
         for (int y = 0; y < grid_size; y++) {
             if (!city->is_empty_at(x, y)) {
                 Node::Type type = city->get_at(x, y)->get_type();
-                if (type == Node::Type::STREET || type == Node::Type::AVENUE){
-                    drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
-                               get_road_icon(type, x, y));
-                } else {
+                if (!(type == Node::Type::STREET || type == Node::Type::AVENUE)){
                     drawPixmap(paint, (x - grid_size / 2) * 100, (y - grid_size / 2) * 100, 100, 100,
                                ICONS[static_cast<int>(type) - 1]);
                 }
             }
         }
     }
-
     // Render extra effects on the grid, depending on the build mode
     if (hovering_grid_x >= 0 && hovering_grid_y >= 0 && hovering_grid_x < grid_size && hovering_grid_y < grid_size)
         if ((tick / 10) % 2 == 0) {
@@ -473,9 +523,9 @@ QPixmap GameWidget::get_road_icon(Node::Type type, int x, int y){
         Tileset filenames are encoded such that the number after its suffix would be:
         !is_empty[north] + 2 * !is_empty[east] + 4 * !is_empty[south] + 8 * !is_empty[west] */
     if (type == Node::Type::STREET) {
-        return STREET_ICONS[ !is_empty[0] + 2 * !is_empty[1] + 4 * !is_empty[2] + 8 * !is_empty[3] ];
+        return STREET_ICONS[ !is_empty[2] + 2 * !is_empty[1] + 4 * !is_empty[0] + 8 * !is_empty[3] ];
     } else if (type == Node::Type::AVENUE) {
-        return AVENUE_ICONS[ !is_empty[0] + 2 * !is_empty[1] + 4 * !is_empty[2] + 8 * !is_empty[3] ];
+        return AVENUE_ICONS[ !is_empty[2] + 2 * !is_empty[1] + 4 * !is_empty[0] + 8 * !is_empty[3] ];
     } else return QPixmap {":/resources/images/avenue_15.png"};
 
 }
