@@ -541,3 +541,8 @@ void City::move_to_next_turn() {
     }
     delete[] population_change;
 }
+
+void City::set_budget(int newbud){
+    if (newbud < 0){return;}
+    budget = newbud;
+}
