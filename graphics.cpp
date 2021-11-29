@@ -1,4 +1,4 @@
-#include "graphics.h"       // Hopefully finish debugging GUI :D
+#include "graphics.h"       
 #include "City.h"
 #include "mainwindow.h"
 
@@ -12,14 +12,20 @@
 #include <cmath>
 #include <regex>
 
+/* * Construct a GameWidget Object
+ * 
+ * Calls constructor for a GameWidge object.
+ * 
+ * @param parent A reference to the parent QWidget.
+ * */
 GameWidget::GameWidget(QWidget* parent) :
     QWidget(parent),
     city(dynamic_cast<MainWindow *>(parent)->city),
     grid_size(city->get_grid_size()),
     scroll_x(0), scroll_y(0),
     scale(1.0f),
-    UP(false), DOWN(false), LEFT(false), RIGHT(false),
-    god_mode(false),       // In default, god mode should not be activated
+    UP(false), DOWN(false), LEFT(false), RIGHT(false),  
+    god_mode(false),       // For demo Purpose. In default, god mode should not be activated
     tick(0),
     hovering_grid_x(-1), hovering_grid_y(-1)
 {
@@ -28,10 +34,21 @@ GameWidget::GameWidget(QWidget* parent) :
     grabKeyboard();
 }
 
+/** Destruct a GameWidget Object
+*
+* Calls destructor for a Gamewidge object.
+*
+**/
 GameWidget::~GameWidget() {
     dealloc_icons();
 }
 
+/** Determine the change of view area 
+*
+* Change the areas viewed in the window according to which key user's pressed 
+* (According to boolean values UP RIGHT DOWN LEFT)
+*
+**/
 void GameWidget::loop() {
     scroll_x += (int) (15.0f * ((int) RIGHT - (int) LEFT) / scale);
     scroll_y += (int) (15.0f * ((int) DOWN - (int) UP) / scale);
@@ -39,6 +56,14 @@ void GameWidget::loop() {
     ++tick;
 }
 
+/** Response to the key pressed
+*
+* Change the boolean value (UP, DOWN, LEFT, RIGHT, god_mode) according 
+* to the key user's pressed
+*
+* @param event  A point to a QKeyEvent which records user's input
+*
+**/
 void GameWidget::keyPressEvent(QKeyEvent* event) {
     switch (event->key()) {
     case Qt::Key::Key_W:
@@ -61,6 +86,15 @@ void GameWidget::keyPressEvent(QKeyEvent* event) {
     }
 }
 
+
+/** Response to the key released (not pressed)
+*
+* Change the boolean value (UP, DOWN, LEFT, RIGHT, god_mode) according 
+* to the key user's released
+*
+* @param event  A point to a QKeyEvent which records user's input
+*
+**/
 void GameWidget::keyReleaseEvent(QKeyEvent* event) {
     switch (event->key()) {
     case Qt::Key::Key_W:
@@ -82,6 +116,14 @@ void GameWidget::keyReleaseEvent(QKeyEvent* event) {
     }
 }
 
+/** Response to user's input from scrolling wheel
+*
+* modifying the data member scale. 
+* Meanwhile, 0.1f < scale < 10.0f
+*
+* @param event  A pointer to QWheelEvent
+*
+**/
 void GameWidget::wheelEvent(QWheelEvent* event) {
     scale = (float) (scale * exp(event->angleDelta().y() / 720.0));
     if (scale > 10.0f) {
@@ -92,6 +134,16 @@ void GameWidget::wheelEvent(QWheelEvent* event) {
     }
 }
 
+/** Response to user's input from releasing one's mouse click
+*
+* If users click on grid cell with a node, then show the information of the node in a message box
+* (Left click: Short info; Right Click: Long info)
+* If users selected buildings button and click on an empty grid cell, then build new building / Road
+* If users selected delete button and click on a grid cell with a node, then demolish the building
+*
+* @param event  A pointer to QWheelEvent
+*
+**/
 void GameWidget::mouseReleaseEvent(QMouseEvent* event) {
     int screen_x = event->x();
     int screen_y = event->y();
@@ -143,6 +195,13 @@ void GameWidget::mouseReleaseEvent(QMouseEvent* event) {
     }
 }
 
+/** Response to user's mouse move event
+*
+* Modify the button group / side menu status using event's coordinates
+*
+* @param event  A pointer to QMouseEvent
+*
+**/
 void GameWidget::mouseMoveEvent(QMouseEvent* event) {
     int screen_x = event->x();
     int screen_y = event->y();
@@ -169,23 +228,67 @@ void GameWidget::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
+
+/** Obtain (/convert) the grid coordinates from actual coordinates of window
+*
+* grid coordinate x is given by : (rx + grid_size * 50) / 100
+* grid coordinate y is given by : (ry + grid_size * 50) / 100
+*
+* @param rx  An int of real coordinate x
+* @param ry  An int of real coordinate y
+* @param x   A x coordinate for return
+* @param y   A y coordinate for return
+*
+**/
 void GameWidget::obtain_grid_coordinates_from_real(int rx, int ry, int& x, int& y) {
     x = (rx + grid_size * 50) / 100;
     y = (ry + grid_size * 50) / 100;
 }
 
+/** Obtain (/convert) the grid coordinates
+*
+* compute grid coordinates using to_real_coordinates() and obtain_grid_coordinates_from_real()
+*
+* @param dispx  An int of display coordinate x
+* @param dispy  An int of display coordinate y
+* @param x   A x coordinate for return
+* @param y   A y coordinate for return
+*
+**/
 void GameWidget::obtain_grid_coordinates(int dispx, int dispy, int& x, int& y) {
     int rx, ry;
     to_real_coordinates(dispx, dispy, rx, ry);
     obtain_grid_coordinates_from_real(rx, ry, x, y);
 }
 
+/** convert coordinates to Display coordinates
+*
+* Display coordinate by setting dispx = (int)((fx - scroll_x) * scale) + width() / 2
+* and dispy = (int)((fy - scroll_y) * scale) + height() / 2
+*
+* @param x       An integer of coordinate x
+* @param y       An integer of coordinate y
+* @param dispx   A display x coordinate for return
+* @param dispy   A display y coordinate for return
+*
+**/
 void GameWidget::to_display_coordinates(int x, int y, int& dispx, int& dispy) {
     float fx = x, fy = y;
     dispx = (int)((fx - scroll_x) * scale) + width() / 2;
     dispy = (int)((fy - scroll_y) * scale) + height() / 2;
 }
 
+/** convert Display coordinates to real coordinates
+*
+* Compute real coordinates by : fx = dispx - width() / 2
+*                               fy = dispy - height() / 2
+*
+* @param dispx  An int of display coordinate x
+* @param dispy  An int of display coordinate y
+* @param x   A x coordinate for return
+* @param y   A y coordinate for return
+*
+**/
 void GameWidget::to_real_coordinates(int dispx, int dispy, int& x, int& y) {
     float fx = dispx - width() / 2, fy = dispy - height() / 2;
 
@@ -193,6 +296,17 @@ void GameWidget::to_real_coordinates(int dispx, int dispy, int& x, int& y) {
     y = (int)(fy / scale + scroll_y);
 }
 
+/** Draw Line from (x1,y1) to (x2,y2)
+*
+* Convert x1,x2,y1,y2 into display coordinates, and draw lines between (dispx1, dispy1) and (dispx2, dispy2)
+*
+* @param Paint  Reference to a QPainter object
+* @param x1  An int of actual coordinate x1
+* @param y1  An int of actual coordinate y1
+* @param x2  An int of actual coordinate x2
+* @param y2  An int of actual coordinate y2
+*
+**/
 void GameWidget::drawLine(QPainter& paint, int x1, int y1, int x2, int y2) {
     int dispx1, dispx2, dispy1, dispy2;
 
@@ -202,6 +316,18 @@ void GameWidget::drawLine(QPainter& paint, int x1, int y1, int x2, int y2) {
     paint.drawLine(dispx1, dispy1, dispx2, dispy2);
 }
 
+/** FillRect on the window 
+*
+* Convert coordinates to display coordinates, and paint with reference of width and height.
+*
+* @param paint Reference to a QPainter object
+* @param x     An int of actual x coordinate
+* @param y     An int of actual y coordinate
+* @param w     An int of width
+* @param h     An int of height
+* @param brush A constant reference of QBrush 
+*
+**/
 void GameWidget::fillRect(QPainter& paint, int x, int y, int w, int h, const QBrush& brush) {
     int dispx1, dispx2, dispy1, dispy2;
 
@@ -211,6 +337,18 @@ void GameWidget::fillRect(QPainter& paint, int x, int y, int w, int h, const QBr
     paint.fillRect(dispx1, dispy1, dispx2 - dispx1, dispy2 - dispy1, brush);
 }
 
+/** Draw Pixmap on the window 
+*
+* Convert coordinates to display coordinates, and paint with reference of width and height.
+*
+* @param paint Reference to a QPainter object
+* @param x     An int of actual x coordinate
+* @param y     An int of actual y coordinate
+* @param w     An int of width
+* @param h     An int of height
+* @param pixmap A constant reference of QPixmap 
+*
+**/
 void GameWidget::drawPixmap(QPainter& paint, int x, int y, int w, int h, const QPixmap& pixmap) {
     int dispx1, dispx2, dispy1, dispy2;
 
@@ -220,7 +358,21 @@ void GameWidget::drawPixmap(QPainter& paint, int x, int y, int w, int h, const Q
     paint.drawPixmap(dispx1, dispy1, dispx2 - dispx1, dispy2 - dispy1, pixmap);
 }
 
-// Helper function
+/** A Helper Function 
+*
+* A helper function that determine whether the node contains type.
+* If any node is a nullptr (no building at that node), return -2
+* If one node is residential object and the other one is gold mine, return 0
+* If one node is residential object and the other one is not a gold mine, return 1
+* If both node is Health object, return -1
+* Otherwise, return -2
+*
+* @param b1 A pointer to a node object
+* @param b2 A pointer to a node object
+*
+* @return an int (either -2/-1/0/1)
+*
+**/
 int contains_type(Node* b1, Node* b2) {
     if (b1 == nullptr || b2 == nullptr) {
         return -2;
@@ -242,28 +394,46 @@ int contains_type(Node* b1, Node* b2) {
     return -2;
 }
 
-// Helper function
+/** A Helper Function to determine test Color
+*
+* If dcolor is -1, change color to red
+* If dcolor is 0 , change color to white
+* If dcolor is 1 , change color to green
+*
+* @param paint A reference to a QPainter 
+* @param dcolor An int representing a color
+*
+**/
 void tsetColor(QPainter& paint, int dcolor) {
     QPen p = paint.pen();
     p.setWidth(7);
     switch (dcolor) {
     case -1:
+        // RED
         p.setColor(QColor::fromRgb(255, 0, 0));
         break;
     case 0:
+        //WHITE
         p.setColor(QColor::fromRgb(255, 255, 255));
         break;
     case 1:
+        // GREEN
         p.setColor(QColor::fromRgb(0, 255, 0));
         break;
     }
     paint.setPen(p);
 }
 
-
-/*************************************************************************************
- * Helper Function : Determine the color of pen according to the traffic flow amount *
- *************************************************************************************/
+/** A Helper Function to Determine the color of pen according to the traffic flow amount 
+*
+* If traffic < 100, change color to dark green
+* If 100 < traffic < 200, change color to yellow
+* If traffic > 200, change color to dark red
+*
+* @param paint A reference to a QPainter 
+* @param traffic An int indicating the traffic flow
+*
+**/
 void RoadColor(QPainter& paint, int traffic) {
     QPen p = paint.pen();
     p.setWidth(7);
@@ -280,7 +450,18 @@ void RoadColor(QPainter& paint, int traffic) {
     paint.setPen(p);
 }
 
-
+/** Paint Event : Determine the paint event according to the mode 
+*
+* Draw Roads on grid, then paint according to overlay function
+* if normal overlay is selected, no action needed
+* if road overlay is selected, paint line indicating the traffic flow
+* if type overlay is selected, paint the whole grid which indicated the category of node
+* If neighbor overlay is selected, paint line linking node with neighboring effect
+* The, draw the buildings, the grid line, and player statistics
+*
+* @param event A reference to a QPainterEvent
+*
+**/
 void GameWidget::paintEvent(QPaintEvent* event) {
     QPainter paint{ this };
 
@@ -314,10 +495,8 @@ void GameWidget::paintEvent(QPaintEvent* event) {
             // In normal mode, no overlay actions required
             break;
         case MainWindow::OverlayButton::ROAD:{
-        /***********************************************************************************************
-         *   Changing the grid cell color into dark green / yellow / red according to the traffic flow *
-         *   Note : Only Avenue / Street will change the color.                                        *
-         ***********************************************************************************************/
+         // Changing the grid cell color into dark green / yellow / red according to the traffic flow 
+         // Note : Only Avenue / Street will change the color.                                        
             QPen original = paint.pen();
             // Go into every suitable grid cell, which is :
             for (int x = 0; x < grid_size; x++) {
@@ -485,6 +664,11 @@ void GameWidget::paintEvent(QPaintEvent* event) {
                    "Population Growth Rate: " + QString::number(city->get_population_growth_rate()));
 }
 
+/** Load the icons 
+*
+* Set the dynamic QPixmap array ICONS into correct graphics files
+*
+**/
 void GameWidget::load_icons() {
     ICONS = new QPixmap[6]{ {":/resources/images/clinic.png"},
                             {":/resources/images/hospital.png"},
@@ -500,13 +684,28 @@ void GameWidget::load_icons() {
     }
 }
 
+/** Deallocating memory of icons
+*
+* Deallocating memory of icons, which are dynamically allocated 
+*
+**/
 void GameWidget::dealloc_icons() {
     delete[] ICONS;
     delete[] STREET_ICONS;
     delete[] AVENUE_ICONS;
 }
 
-// Get variety of road icon based on x-y coordinate
+/** Get Variety of Road Icon based on it's (x,y) coordinate
+*
+* Identify presence of roads node in the neighboring grids, 
+* and show the respective road icon for that grid cell
+*
+* @param type enum Node::Type, indicate the type of grid cell
+* @param x An integer storing the x coordinate
+* @param y An integer storing the y coordinate
+*
+* @return QPixmap The directory of the graphics
+**/
 QPixmap GameWidget::get_road_icon(Node::Type type, int x, int y){
 
     bool is_empty[4] = {false};
