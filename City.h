@@ -93,6 +93,8 @@ public:
     inline void set_home_health_beta_0 (float beta)  {home_health_beta_0 = beta;}
     inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
     
+    /// God Mode: set the city's budget into newbudget
+    void set_budget(int newbud);
 
 private:
     Node ***grid;
