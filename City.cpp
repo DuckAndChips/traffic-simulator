@@ -13,7 +13,7 @@ City::City(int size): grid_size(size), budget(200), turn(1) {
     }
 }
 
-City::City(const std::string &filename): grid_size(0), budget(150), turn(1) {
+City::City(const std::string &filename): grid_size(0), budget(200), turn(1) {
     ifstream input;
     input.open(filename);
 
