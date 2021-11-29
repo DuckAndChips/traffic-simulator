@@ -2,6 +2,16 @@
 #define CLINIC_H
 
 #include "Health.h"
+
+/* *
+* Clinic Class
+* 
+* This class holds information and methods for Clinic nodes in the city grid. 
+* This class inherites the Health class, which inherits the Node class. 
+*
+* */
+
+
 class Clinic: public Health {
 public:
     static const int cost{50};
