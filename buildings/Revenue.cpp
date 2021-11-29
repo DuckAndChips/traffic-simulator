@@ -30,7 +30,7 @@ int Revenue::get_working_population() const {
  * 
  * @param p Working population of the Revenue building to be set to.
  * */
-void Revenue::set_working_population(int p) {
-    working_population = p;
+void Revenue::set_working_population(int population) {
+    working_population = population;
 }
 

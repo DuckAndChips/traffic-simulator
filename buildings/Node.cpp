@@ -87,6 +87,7 @@ int Node::get_population_growth_rate_contribution() const {
 /** Get the number of work trips generated from a Node. 
  * 
  * Virtual function. 
+ * Work trips are trips from a Residential building to a Revenue building. 
  * Calculate the number of work trips generated from a Residential building by the following: 
  * The building's population * (get_home_work_beta_0 + city's revenue * get_home_work_beta_1) 
  * where get_home_work_beta_0 and get_home_work_beta_1 are regression coefficients. 
@@ -101,6 +102,7 @@ int Node::get_work_trips(){
 /** Get the number of health trips generated from a Node. 
  * 
  * Virtual function. 
+ * Health trips are trips from a Residential building to a Health building. 
  * Calculate the number of health trips generated from a Residential building by the following: 
  * The building's population * (get_home_health_beta_0 + city's revenue * get_home_health_beta_1) 
  * where get_home_health_beta_0 and get_home_health_beta_1 are regression coefficients. 
@@ -155,6 +157,14 @@ int Node::get_working_population() const{
  * Does nothing because only Residential buildings have population. 
  */
 void Node::increase_population(int population){}
+
+/** Set the working population of a Node. 
+ * 
+ * Virtual function. 
+ * Does nothing because only Revenue buildings have a working population.
+ * @param population Working population of the Revenue building to be set to.
+ * */
+void Node::set_working_population(int population) {}
 
 /** Get neighboring Node. 
  * 

@@ -65,6 +65,7 @@ public:
 
     /// Functions that implement the gaming mechanism 
     virtual void increase_population(int population);
+    virtual void set_working_population(int population);
 
     /// Functions that handle the Node pointers array used in this 2D doubly linked list data structure
     Node* get_neighboring_node(Direction direction) const;

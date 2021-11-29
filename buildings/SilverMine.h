@@ -2,6 +2,14 @@
 #define SILVERMINE_H
 
 #include "Revenue.h"
+
+/* *
+* SilverMine Class
+* 
+* This class holds information and methods for SilverMine nodes in the city grid. 
+* This class inherites the Revenue class, which inherits the Node class. 
+*
+* */
 class SilverMine: public Revenue {
 public:
     static const int cost{50};

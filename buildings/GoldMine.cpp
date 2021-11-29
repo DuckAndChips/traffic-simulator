@@ -50,6 +50,22 @@ int GoldMine::get_revenue() const {
     return 2 * (city.get_population() + number_neighboring_population());
 }
 
+/** Get the revenue per worker of a Gold Mine. 
+ * 
+ * @return The data member that holds the revenue per worker
+ */
+int GoldMine::get_revenue_per_worker() const{
+    return revenue_per_worker;
+}
+
+/** Set the revenue per worker of a Gold Mine. 
+ * 
+ * @param r The revenue per worker to be set to
+ */
+void GoldMine::set_revenue_per_worker(int r){
+    revenue_per_worker = r;
+}
+
 /** Get a long version of a string that contains information about the Gold Mine
  * 
  * Returns a string that contains information including the presence of road 

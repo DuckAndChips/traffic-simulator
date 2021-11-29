@@ -2,6 +2,13 @@
 #define STREET_H
 
 #include "Road.h"
+/**
+* Street Class
+* 
+* This class holds information and methods for Street nodes in the city grid. 
+* This class inherites the Road class, which inherits the Node class. 
+*
+**/
 class Street: public Road {
     public:
         static const int cost{20};

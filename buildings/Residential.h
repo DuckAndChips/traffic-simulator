@@ -2,6 +2,14 @@
 #define RESIDENTIAL_H
 
 #include "Node.h"
+
+/**
+ * Residential class
+ * 
+ * This class holds information and methods for Residential type nodes in the city grid.
+ * This class inherits the Node class.
+ * 
+ */
 class Residential: public Node {
 public:
     virtual Node::Category get_category() const override;
