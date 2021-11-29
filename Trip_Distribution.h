@@ -48,6 +48,7 @@ After that, travel time matrix and number of trips matrix is generated one after
 
 class Trip_Distribution{
     friend class City;
+    friend class Trip_Assignment;
     private:
         std::vector<Residential*> & all_residential_building;
         std::vector<Revenue*> & all_revenue_building;

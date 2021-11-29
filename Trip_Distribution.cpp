@@ -5,12 +5,12 @@
 #include "City.h"
 using namespace std;
 
-
-
 Trip_Distribution::Trip_Distribution(City &city, std::vector<Residential*> & residential_buildings,
         std::vector<Revenue*> & revenue_buildings, std::vector<Health*> & health_buildings):
         all_residential_building(residential_buildings), all_revenue_building(revenue_buildings),
-        all_health_building(health_buildings), city(city){}
+        all_health_building(health_buildings), city(city){
+
+}
 
 void Trip_Distribution::set_all_residential(){
     for(int i=0; i<city.get_grid_size(); ++i){
@@ -74,13 +74,6 @@ bool Trip_Distribution::trip_distribution_main(Node::Category category){
     if(!(factors.size() == 0 || OD_path.size() == 0 || OD_matrix.size() == 0)) return false;
     set_factor_and_OD_path();
     set_OD_matrix(category);
-//    //debug
-//    for(unsigned int i=0; i<OD_matrix.size(); i++){
-//        for(unsigned int j=0; j<OD_matrix[i].size(); j++){
-//            qDebug()<<OD_matrix[i][j];
-//        }
-//    }
-//    //debug end
     return true;
 }
 
@@ -105,7 +98,6 @@ void Trip_Distribution::set_origin(){
 }
 
 void Trip_Distribution::set_work_destination(){
-    // all_destination_building = static_cast<std::vector<Node*>>(all_revenue_building);
     for(std::vector<Revenue*>::iterator i = all_revenue_building.begin(); i != all_revenue_building.end(); i++){
         Revenue* revenue = *i;
         all_destination_building.push_back(revenue);
@@ -127,7 +119,6 @@ void Trip_Distribution::set_work_destination(){
 }
 
 void Trip_Distribution::set_health_destination(){
-    // all_destination_building = static_cast<std::vector<Node*>>(all_health_building);
     for(std::vector<Health*>::iterator i = all_health_building.begin(); i != all_health_building.end(); ++i){
         Health* health = *i;
         all_destination_building.push_back(health);
@@ -164,22 +155,14 @@ void Trip_Distribution::set_factor_and_OD_path(){
                 continue;
             }
             float dist = find_shortest_path(origin[i],destination[j],path);
-//            qDebug()<<"shortest path"<<dist;
-            for(unsigned int i=0; i<path.size(); i++){
-//                path[i]->set_traffic_flow(-3);
-            }
             if(dist >= max_path){
                 factors[i].push_back(0);
                 OD_path[i].push_back(vector<Road*>());
             }else if(dist >= 0){
                 factors[i].push_back(all_destination_building[j]->get_attractiveness()/dist);
                 OD_path[i].push_back(path);
-            }else{
-//                qDebug()<<"Error in Trip_Distribution::find_shortest_path: return 0 or -ve number"<<endl;
-                exit(-1);
             }
         }
-
         /// Change factors to weight
         float total_factors = 0;
         for(unsigned int j=0; j<factors[i].size(); ++j){
@@ -211,74 +194,50 @@ int Trip_Distribution::find_shortest_path(Road* start_pt, Road* end_pt, std::vec
     /// case 1: reach destination
     if(start_pt == end_pt) return 1;
 
-    /**
-    /// case 2: reach the end of road (seems redudent here coz case 3 include case 2)
-    /// 2.0 terminate as a single road
-        if( start_pt->get_neighboring_road(Node::Direction::EAST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::WEST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::NORTH) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::SOUTH) == nullptr
-        ){
-            return max_path;
-        }
-    if(path.size() > 0){
-        /// 2.1 terminate as the north edge
-        if( start_pt->get_neighboring_road(Node::Direction::EAST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::WEST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::NORTH) == nullptr &&
-            path.back() == start_pt->get_neighboring_road(Node::Direction::SOUTH)
-            /// here have error too coz last element of path should be start_pt itself
-        ){
-            return max_path;
-        }
-        /// 2.2 terminate as the east edge
-        if( start_pt->get_neighboring_road(Node::Direction::EAST) == nullptr &&
-            start_pt->get_neighbor
-        }
-        /// 2.3 terminate as the south edge
-        if( start_pt->get_neighboring_road(Node::Direction::EAST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::SOUTH) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::WEST) == nullptr &&
-            path.back() == start_pt->get_neighboring_road(Node::Direction::SOUTH)
-        ){
-            return max_path;
-        }
-        /// 2.4 terminate as the west edge
-        if( start_pt->get_neighboring_road(Node::Direction::WEST) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::SOUTH) == nullptr &&
-            start_pt->get_neighboring_road(Node::Direction::NORTH) == nullptr &&
-            path.back() == start_pt->get_neighboring_road(Node::Direction::WEST)
-        ){
-            return max_path;
-        }
-    }
-    */
-
-    /// case 3: all road options have been walked
+    /// case 2: all road options have been walked
         std::vector<Road*> road_options;
-        if(start_pt->get_neighboring_road(Node::Direction::NORTH))
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::NORTH));
-        if(start_pt->get_neighboring_road(Node::Direction::EAST))
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::EAST));
-        if(start_pt->get_neighboring_road(Node::Direction::SOUTH))
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::SOUTH));
-        if(start_pt->get_neighboring_road(Node::Direction::WEST))
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::WEST));
-
-    std::vector<std::vector<Road*>::iterator> walked_road_options;
-    for(std::vector<Road*>::const_iterator p = path.begin(); p != path.end(); ++p){
-        std::vector<Road*>::iterator q;
-        for(q = road_options.begin(); q != road_options.end(); ++q){
-            if (*p==*q)
-                walked_road_options.push_back(q);
+        if(start_pt->get_neighboring_road(Node::Direction::NORTH)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::NORTH)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::NORTH));
         }
-    }
+        if(start_pt->get_neighboring_road(Node::Direction::EAST)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::EAST)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::EAST));
+        }
+        if(start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::SOUTH));
+        }
 
-    for(std::vector<std::vector<Road*>::iterator>::iterator p = walked_road_options.begin(); p != walked_road_options.end(); ++p){
-       road_options.erase(*p);
-    }
-
-    if(road_options.size() == 0) return max_path; /// case 3 return statement
+        if(start_pt->get_neighboring_road(Node::Direction::WEST)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::WEST)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::WEST));
+        }
+    if(road_options.empty()) return max_path; /// case 2 return statement
 
     /// recursive part
     int path_dist = max_path;
@@ -293,11 +252,8 @@ int Trip_Distribution::find_shortest_path(Road* start_pt, Road* end_pt, std::vec
             new_path = temp;
         }
     }
-
     path = new_path;
-//    qDebug()<<path_dist; //debug
     return path_dist;
-
 }
 
 
@@ -313,9 +269,6 @@ void Trip_Distribution::set_OD_matrix(Node::Category category){
             total_trips = all_residential_building[i]->get_work_trips();
         }else if(category == Node::Category::HEALTH){
             total_trips = all_residential_building[i]->get_health_trips();
-        }else{
-            cerr<<"Weird category input in Trip_Distribution::OD_matrix_traffic"<<endl;
-            exit(-1);
         }
 
         /// set OD_matrix

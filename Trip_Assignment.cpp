@@ -9,14 +9,8 @@ using namespace std;
 /**
  * The following set functions maybe move to city's class*/
 
-//Trip_Distribution::Trip_Distribution(City &city):city(city){
-//    Trip_Distribution::set_all_residential();
-//    Trip_Distribution::set_all_revenue();
-//    Trip_Distribution::set_all_health();
-//}
 
-
-Trip_Assignment::Trip_Assignment(City &citi, std::vector<Road*>& origins, std::vector<Road*>& destinations, std::vector<std::vector<int>>& OD):
+Trip_Assignment::Trip_Assignment(City &citi, std::vector<Road*> origins, std::vector<Road*> destinations, std::vector<std::vector<int>>& OD):
         origin(origins),destination(destinations), OD_Matrix(OD), city(citi){}
 
 void Trip_Assignment::set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD){
@@ -25,8 +19,7 @@ void Trip_Assignment::set_Traffic_Model(std::vector<Road*> &origins, std::vector
     this->OD_Matrix = OD;
 }
 
-void Trip_Assignment::trip_assignment_main(){
-    
+void Trip_Assignment::trip_assignment_main(){ 
     /// Error checking
     if(size_checking()){
         return;
@@ -40,28 +33,22 @@ void Trip_Assignment::trip_assignment_main(){
             int trips = OD_Matrix[i][j];
             if(trips == 0) continue;
             std::vector<std::vector<Road*>> paths = get_all_paths(origin[i], destination[j]);
+
+//            // Model (1) begin
+//            std::vector<std::vector<Road*>> paths;
+//            std::vector<Road*> path;
+//            find_shortest_path(origin[i], destination[j], path);
+//            paths.push_back(path);
+//            // Model (1) end
+            //debug begin
+            for(int k=0; k<paths.size(); k++){
+                qDebug()<<paths[k].size();
+            }
             for(int k = 0; k < trips; k+= incremental_amount){
-                load_traffic(paths);  
+                load_traffic(paths);
             }
         }
     }
-
-    /// old version of code using iterator
-    /**
-    std::vector<Road*>::iterator p;
-    int i = 0;
-    for(p = origin.begin(); p != origin.end(); ++p, ++i){
-        std::vector<Road*>::iterator q;
-        int j = 0;
-        for(q = destination.begin(); q != destination.end(); ++q, ++j){
-            int trips = OD_Matrix[i][j];
-            std::vector<std::vector<Road*>> paths = get_all_paths(*p, *q);
-            for(int k = 0; k < trips; ++k){
-                load_traffic(paths);  
-            }                    
-        }
-    }
-    */
 }
 
 
@@ -82,33 +69,52 @@ bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std
     /// end case: reach destination
     if(start_pt == end_pt) return true;
 
-    /// to store an array of all available road options
-        std::vector<Road*> road_options;
-        if(start_pt->get_neighboring_road(Node::Direction::NORTH)) 
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::NORTH));        
-        if(start_pt->get_neighboring_road(Node::Direction::EAST)) 
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::EAST));
-        if(start_pt->get_neighboring_road(Node::Direction::SOUTH)) 
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::SOUTH));
-        if(start_pt->get_neighboring_road(Node::Direction::WEST)) 
-            road_options.push_back(start_pt->get_neighboring_road(Node::Direction::WEST)); 
-    
-    
-    std::vector<std::vector<Road*>::iterator> walked_road_options;
-    for(std::vector<Road*>::const_iterator p = path.begin(); p != path.end(); ++p){
-        std::vector<Road*>::iterator q;
-        for(q = road_options.begin(); q != road_options.end(); ++q){
-            if (*p==*q)
-                walked_road_options.push_back(q);                             
-        }                      
+    std::vector<Road*> road_options;
+    if(start_pt->get_neighboring_road(Node::Direction::NORTH)){
+        bool check = true;
+        for(unsigned int i = 0; i<path.size(); i++){
+            if(path[i] == start_pt->get_neighboring_road(Node::Direction::NORTH)){
+                 check = false;
+                 break;
+            }
+        }
+        if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::NORTH));
+    }
+    if(start_pt->get_neighboring_road(Node::Direction::EAST)){
+        bool check = true;
+        for(unsigned int i = 0; i<path.size(); i++){
+            if(path[i] == start_pt->get_neighboring_road(Node::Direction::EAST)){
+                 check = false;
+                 break;
+            }
+        }
+        if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::EAST));
+    }
+    if(start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+        bool check = true;
+        for(unsigned int i = 0; i<path.size(); i++){
+            if(path[i] == start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+                 check = false;
+                 break;
+            }
+        }
+        if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::SOUTH));
     }
 
-    for(std::vector<std::vector<Road*>::iterator>::iterator p = walked_road_options.begin(); p != walked_road_options.end(); ++p){
-       road_options.erase(*p);                     
+    if(start_pt->get_neighboring_road(Node::Direction::WEST)){
+        bool check = true;
+        for(unsigned int i = 0; i<path.size(); i++){
+            if(path[i] == start_pt->get_neighboring_road(Node::Direction::WEST)){
+                 check = false;
+                 break;
+            }
+        }
+        if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::WEST));
     }
+
 
     /// end case: reach termination
-    if(road_options.size() == 0) return false;
+    if(road_options.empty()) return false;
 
     /// recursive part
     std::vector<std::vector<Road*>> add_paths;
@@ -169,7 +175,7 @@ bool Trip_Assignment::size_checking() const{
     int destination_size = destination.size();
 
     /// check if the OD info are empty or not
-    if(origin_size == 0 || destination_size == 0) return true;
+    if(origin_size == 0 || destination_size == 0)    return true;
     if(origin_size != OD_Matrix.size()) return true;
 
     /// check the no of rows and columns matches with origin's size and destination's size or not
@@ -180,33 +186,78 @@ bool Trip_Assignment::size_checking() const{
     return false;
 }
 
-/**
-bool Trip_Assignment::error_checking(Road* start_pt, const Road* end_pt, const std::vector<std::vector<Node::Direction>> &paths) const{
-    if(start_pt == end_pt){
-        if (paths.size()) return true;
-        return false;
+int Trip_Assignment::find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path){
+
+    /// handling path to make sure it contains the current road*
+    if(path.size() == 0){
+        path.push_back(start_pt);
+    }else{
+        if(path.back() != start_pt)
+            path.push_back(start_pt);
     }
-    
-    for(std::vector<std::vector<Node::Direction>>::const_iterator p = paths.begin();
-        p != paths.end(); ++p){
-        Road* temp = start_pt;
-        for(std::vector<Node::Direction>::const_iterator q = p->begin();
-            q != p->end(); ++q){
-            temp = temp->get_neighboring_road(*q);  
-            if(temp == nullptr) {
-                cerr<<"Obtain nullptr in the paths"<<endl; 
-                exit(-1);
-                return true;
-            }     
+
+    /// end cases
+    /// case 1: reach destination
+    if(start_pt == end_pt) return 1;
+
+    /// case 2: all road options have been walked
+        std::vector<Road*> road_options;
+        if(start_pt->get_neighboring_road(Node::Direction::NORTH)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::NORTH)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::NORTH));
         }
-        if(temp != end_pt) {
-            cerr<< "Cannot go back to end_pt after paths"<<endl;
-            exit(-1);
-            return true;
+        if(start_pt->get_neighboring_road(Node::Direction::EAST)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::EAST)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::EAST));
+        }
+        if(start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::SOUTH)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::SOUTH));
+        }
+        if(start_pt->get_neighboring_road(Node::Direction::WEST)){
+            bool check = true;
+            for(unsigned int i = 0; i<path.size(); i++){
+                if(path[i] == start_pt->get_neighboring_road(Node::Direction::WEST)){
+                     check = false;
+                     break;
+                }
+            }
+            if(check) road_options.push_back(start_pt->get_neighboring_road(Node::Direction::WEST));
+        }
+    if(road_options.empty()) return 999; /// case 3 return statement
+
+    /// recursive part
+    int path_dist = 999;
+    std::vector<Road*> new_path = path;
+    std::vector<Road*>::iterator q;
+    for(q = road_options.begin(); q != road_options.end(); ++q){
+        std::vector<Road*> temp = path;
+        int dist = 1 + find_shortest_path(*q,end_pt,temp);
+        if(dist < path_dist){
+            path_dist = dist;
+            new_path = temp;
         }
     }
-    return false;
+    path = new_path;
+    return path_dist;
 }
-*/
 
 

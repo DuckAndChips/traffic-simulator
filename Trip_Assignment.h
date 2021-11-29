@@ -54,8 +54,8 @@ using namespace std;
 class Trip_Assignment {
     
     private:
-        std::vector<Road*>& origin;
-        std::vector<Road*>& destination;
+        std::vector<Road*> origin;
+        std::vector<Road*> destination;
         std::vector<std::vector<int>>& OD_Matrix;
         City &city;
         friend class City;
@@ -65,7 +65,7 @@ class Trip_Assignment {
         static const int incremental_amount{1};        
 
         /// constructors and function that setup data members
-        explicit Trip_Assignment(City &citi, std::vector<Road*>& origins, std::vector<Road*>& destinations, std::vector<std::vector<int>>& OD);
+        explicit Trip_Assignment(City &citi, std::vector<Road*> origins, std::vector<Road*> destinations, std::vector<std::vector<int>>& OD);
         void set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD);
 
         /// Main functions used for trip assigment
@@ -86,6 +86,9 @@ class Trip_Assignment {
 
         /// This function returns the travel time of a given road path
         double get_travel_time(std::vector<Road*> &path);
+
+        // shortest path
+        int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path);
 };
 
 #endif // TRIP_ASSIGNMENT_H
