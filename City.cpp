@@ -472,9 +472,9 @@ void City::move_to_next_turn() {
         * population change = current population * population growth
         */
 
-    for (unsigned int i = 0; i < all_revenue_buildings.size(); ++i){
-        float growth_rate = 0.0f;
-        for(unsigned int j = 0; j < all_health_buildings.size(); ++j){
+    for (unsigned int i = 0; i < all_residential_buildings.size(); ++i){
+        float growth_rate = 0.1f;
+        for(unsigned int j = 0; j < all_residential_buildings.size(); ++j){
             vector<Road*> path = home_health_trip.OD_path[i][j];
             if(!path.empty()){
                 float travel_time = trip_assignment.get_travel_time(path);
@@ -483,11 +483,11 @@ void City::move_to_next_turn() {
                 else if(travel_time <= 11.0f)
                     growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
                 else if(travel_time <= 15.0f)
-                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
-                else growth_rate -= (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
+                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/100;
+                else growth_rate -= (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path));
             }    
         }
-        all_revenue_buildings[i]->increase_population(all_revenue_buildings[i]->get_population()*growth_rate);
+        all_residential_buildings[i]->increase_population(all_residential_buildings[i]->get_population()*growth_rate);
     }
 
 
