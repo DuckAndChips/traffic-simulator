@@ -70,6 +70,8 @@ int Node::get_population_growth() const {
 
 /** Get the population growth rate contribution for a Node. 
  * 
+ * This is an original function in PA4 that is depreciated
+ * due to the different game mechanics.
  * Virtual function. 
  * Calculate the maximum population of a Residential or Health building by the following: 
  * For Residential buildings, it is -population of the building. 
