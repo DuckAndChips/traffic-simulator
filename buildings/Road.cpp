@@ -48,7 +48,7 @@ double Road::get_travel_time() const{
 Road* Road::get_neighboring_road(Node::Direction direction) const{
     if(is_neighbor_road(direction)){
         return dynamic_cast<Road*>(get_neighboring_node(direction));
-    }
+    } else return nullptr;
 }
 
 /** Set traffic flow. 
