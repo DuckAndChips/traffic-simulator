@@ -611,37 +611,6 @@ void City::move_to_next_turn() {
     }
     if(get_population() != 0 ) population_growth_rate = static_cast<float>(population_growth) / get_population();
 
-
-    /** original implementation of population change in PA3
-    int** population_change = new int* [grid_size];
-    for (int x = 0; x < grid_size; x++) {
-        population_change[x] = new int[grid_size];
-        for (int y = 0; y < grid_size; y++) {
-            if (grid[x][y] == nullptr) {
-                population_change[x][y] = 0;
-            }
-            else {
-                population_change[x][y] = grid[x][y]->get_population_growth();
-            }
-        }
-    }
-
-    // Now apply the change in population to each tile
-    for (int x = 0; x < grid_size; x++) {
-        for (int y = 0; y < grid_size; y++) {
-            if (grid[x][y] != nullptr) {
-                grid[x][y]->increase_population(population_change[x][y]);
-            }
-        }
-    }
-    
-
-    // Remember to free the memory
-    for (int x = 0; x < grid_size; x++) {
-        delete[] population_change[x];
-    }
-    delete[] population_change;
-    */
 }
 
 
