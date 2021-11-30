@@ -1,5 +1,8 @@
-COMP2012H G20 Project :)
+## Traffic Simulator
 
-146snk lm X)
+#### How to run the file:
+Open `SimpleCity.pro` in Qt Creator and run it.
 
-hello by Jacky
+---
+
+This project is created by group H20, with members YIN Junyu, LUK Pak Him, TSE Hoi Chun and MOK Nga Yiu, in fulfillment of COMP2012H, CSE, HKUST.
