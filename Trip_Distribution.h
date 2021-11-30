@@ -32,13 +32,6 @@ using namespace std;
  * We define City as the friend class of this class for City to get the results of Trip Distribution.
  */
 
-/*** Note by Jacky: I have change some of the implementation of the code so the following discription is inaccurate now
-Trip_Distribution is an object used to generate 3 vectors, which include origin matrix, destination matrix, and OD number of trips 2d vector.
-First, 3 vectors containing residential, revenue, and health buildings are generated. Then, according to the category of trips, including
-home-work trips and home-health trips, it will call corresponding set origin and set destination function to set origin and destination vector.
-After that, travel time matrix and number of trips matrix is generated one after he other.
-***/
-
 /**
  * WARNING
  * This class is designed to perform trip distribution for one set of OD only.
@@ -87,11 +80,11 @@ class Trip_Distribution{
          * These three functions set the origin and destination data member of this class.
          * Warning: nullptr will be set if there is no road near the residential/commercial/health buildings
          */
-        void set_origin();
-        void set_work_destination();
-        void set_health_destination();
-        void set_factor_and_OD_path();
-        void set_OD_matrix(Node::Category category);
+        void set_origin(); //Will be called every object
+        void set_work_destination(); //only call for home_work
+        void set_health_destination(); //only call for home_health
+        void set_factor_and_OD_path(); //call for every object after the prev 2 functions
+        void set_OD_matrix(Node::Category category); //call for every object after previous function
 
 
         void set_all_residential();
@@ -105,7 +98,7 @@ class Trip_Distribution{
          * Note that for the gravity model to hold, this function will return 1 if start_pt = end_pt
          * Return max_path if it is impossible to go from start_pt to end_pt
          */
-        int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path);
+        int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path); // helper function to return the shortest path
         int find_shortest_path(Road* start_pt, Road* end_pt); /// an overloading function for correct implementation without path
 
 };
