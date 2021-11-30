@@ -48,6 +48,7 @@ void Trip_Assignment::trip_assignment_main(){
             if(trips == 0) continue;
 
             /// This line of code should be used if incremental loading (default model) is used.
+            /// However, it seems like the following functions cannot really get all possible paths
             std::vector<std::vector<Road*>> paths = get_all_paths(origin[i], destination[j]);
 
             /** 
@@ -55,12 +56,14 @@ void Trip_Assignment::trip_assignment_main(){
              * The remaining line of codes can be used to replace the get_all_paths function to implement the above trip assignment
              * model.
              */
-//            // Model (all-or-nothing) start
-//            std::vector<std::vector<Road*>> paths;
-//            std::vector<Road*> path;
-//            find_shortest_path(origin[i], destination[j], path);
-//            paths.push_back(path);
-//            // Model (all-or-nothing) end
+            // Model (all-or-nothing) start
+            /**
+            std::vector<std::vector<Road*>> paths;
+            std::vector<Road*> path;
+            find_shortest_path(origin[i], destination[j], path);
+            paths.push_back(path);
+            */
+           // Model (all-or-nothing) end
             for(int k = 0; k < trips; k+= incremental_amount){
                 load_traffic(paths);
             }
@@ -80,7 +83,7 @@ std::vector<std::vector<Road*>> Trip_Assignment::get_all_paths(Road* start_pt, R
     std::vector<std::vector<Road*>> paths;
     std::vector<Road*> path_zero;
     path_zero.push_back(start_pt);
-    paths.push_back(path_zero);
+    //paths.push_back(path_zero);
     get_all_paths(start_pt,end_pt,paths,path_zero);
     return paths;
 }
@@ -89,18 +92,24 @@ std::vector<std::vector<Road*>> Trip_Assignment::get_all_paths(Road* start_pt, R
  * 
  * @param start_pt A pointer to the origins (Road objects)
  * @param end_pt A pointer to the destination (Road objects)
- * @param paths used to store and return the possible paths by reference
- * @param path used to pass the walked path to the next recursive call
+ * @param paths used to store and return the possible paths by reference (pass empty paths to it as input)
+ * @param path used to pass the walked path to the next recursive call (pass a path with start_pt as the only element to it as input)
  * @return true if it is possible to reach the end_pt and false if it is not possible 
  */
 
 bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std::vector<Road*>>& paths, std::vector<Road*>& path){
     
     /// source of error: index handling
-    if (paths.size() == 0) return false;
+    if (!paths.empty()) return false;
     
     /// end case: reach destination
-    if(start_pt == end_pt) return true;
+    /// add the end point as the first element in the path
+    if(start_pt == end_pt) {
+        std::vector<Road*> path_zero;
+        path_zero.push_back(start_pt);
+        paths.push_back(path_zero);
+        return true;
+    }
 
     /// check available road options (north, east, south, west)
     /// a road option is available only when their is a road exists in that direction and that road has not been passed
@@ -153,35 +162,33 @@ bool Trip_Assignment::get_all_paths(Road* start_pt, Road* end_pt,std::vector<std
     if(road_options.empty()) return false;
 
     /// recursive part
-    std::vector<std::vector<Road*>> add_paths;
 
     for(unsigned int i=0; i < road_options.size(); ++i){
+
+            //std::vector<Road*> path_zero;
+            //path_zero.push_back(road_options[i]);
+            //temp_paths.push_back(path_zero);
+
+        /// add new road_options to the road
+        std::vector<Road*> temp_path;
+        temp_path = path;
+        temp_path.push_back(road_options[i]);
+        /// create empty paths and pass to a recursive call
         std::vector<std::vector<Road*>> temp_paths;
-            std::vector<Road*> path_zero;
-            path_zero.push_back(road_options[i]);
-            std::vector<Road*> temp_path;
-            temp_path = path;
-            temp_path.push_back(road_options[i]);
-        temp_paths.push_back(path_zero);
         if(get_all_paths(road_options[i],end_pt,temp_paths,temp_path)){
             for(unsigned int j = 0; j < temp_paths.size(); ++j){
-                add_paths.push_back(temp_paths[j]);
+                paths.push_back(temp_paths[j]);
             }
         }
     }
 
     /// end case: reach termination (all avaiable road options are unable to reach destination)
-    if(add_paths.size()==0) return false;
+    if(paths.size()==0) return false;
 
     /// add the path back to paths and return true to indicate this is a possible path
-    paths[0].insert(paths[0].end(),add_paths[0].begin(),add_paths[0].end());
-
-    for(unsigned int i = 1; i <add_paths.size(); ++i){
-        std::vector<Road*> temp = path;
-        temp.insert(temp.end(),add_paths[i].begin(),add_paths[i].end());
-        paths.push_back(temp);
+    for (unsigned int i = 0; i < paths.size(); ++i){
+        paths[i].push_back(start_pt);
     }
-
     return true;
 }
 
