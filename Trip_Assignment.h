@@ -14,23 +14,6 @@
 #include <algorithm>
 using namespace std;
 
-/**
- * In this project, our group implements the Sequential Demand Forecasting Model introduced in CIVL3610 Traffic and
- * Transportation Engineering of HKUST to predict traffic flow and respective travel time in a city.
- * 
- * The Sequential Demand Focasting Model consists of four steps:
- * Step 1: Trip Generation (Decision: to travel or not)
- * Step 2: Trip Distrubution (Decision â€“ to where, what destination?)
- * Step 3: Modal Split (Decision â€“ how, what mode?)
- * Step 4: Traffic Assignment (Decision â€“ how, which route?)
- * 
- * In this project, these four steps are implemented by the following parts of our code respectively:
- * Step 1: member functions of Residential class
- * Step 2: Trip_Distrubution class in this file
- * Step 3: This step is skiped since we do not consider multiple travel modes in the city (e.g. MTR/bus)
- * Step 4: Trip_Assignment class in this file
- */
-
 
 /**
  * Trip_Assignment is a class that perform the fourth step of the sequential demand focasting model.
@@ -39,9 +22,8 @@ using namespace std;
  * -    A portion of the O-D entries is assigned at each iteration.
  * -    Travel times are then updated and an additional portion of the O-D matrix is loaded onto the network.
  * 
- * Part of the codes used in this step are implemented in the Road class.
- * 
- * We define City as the friend class of this class for City to get the results of Trip Assignment.
+ * The result of the trip assignment will be loaded to the road network directly.  
+ * (And therefore part of the codes used in the trip assignment step are implemented in the Road class too.
  */
 
 /**
@@ -54,22 +36,24 @@ using namespace std;
 class Trip_Assignment {
     
     private:
-        std::vector<Road*> origin;
-        std::vector<Road*> destination;
-        std::vector<std::vector<int>> OD_Matrix;
-        City &city;
-        friend class City;
+        std::vector<Road*> origin;                  /// a vector storing all pointers to the origins (Road objects)
+        std::vector<Road*> destination;             /// a vector storing all pointers to the destinations (Road objects)
+        std::vector<std::vector<int>> OD_Matrix;    /// a 2D vector storing the number of trips from origins to destinations
+
     public:
 
         /// The incremental portion that used in trip assignment
         static const int incremental_amount{1};        
 
         /// constructors and function that setup data members
-        explicit Trip_Assignment(City &citi);
+        explicit Trip_Assignment() = default;
         void set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD);
 
         /// Main functions used for trip assigment
         void trip_assignment_main();
+
+        /// This function returns the travel time of a given road path
+        double get_travel_time(std::vector<Road*> &path);
 
         /// Remaining are some helper functions that needed for trip assignment 
         
@@ -83,9 +67,6 @@ class Trip_Assignment {
 
         /// This function load each incremental flows to the road paths with shortest travel time
         void load_traffic(std::vector<std::vector<Road*>> &paths);
-
-        /// This function returns the travel time of a given road path
-        double get_travel_time(std::vector<Road*> &path);
 
         // shortest path
         int find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path);
