@@ -10,6 +10,18 @@
 const QString BTN_RELEASED_STYLE = "background-color: rgba(50, 127, 127, 255);";
 const QString BTN_SELECTED_STYLE = "background-color: rgba(255, 255, 255, 255);";
 
+/**
+ * Constructor of Main Window.
+ *
+ * Initializes its data members, with buttons set to their default selections.
+ * (Navigate as default side menu button; Normal overlay as default overlay button)
+ * Sets up UI. Initializes the styles and labels of all buttons.
+ * Runs th game loop so that it runs 50 times a second.
+ * Configures the position of the side menu.
+ *
+ * @param city Pointer to the current city
+ * @param parent Pointer to its parent widget
+ */
 MainWindow::MainWindow(City *const city, QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow),
@@ -33,7 +45,12 @@ MainWindow::MainWindow(City *const city, QWidget *parent) :
     ui->side_menu->setMaximumWidth(0);
 }
 
-
+/**
+ * Initializes the styles and labels of all side menu buttons.
+ *
+ * Sets the label of the side menu buttons to have the corresponding costs.
+ * Sets the style of the side menu buttons to be in released style except for Navigate which has selected style.
+ */
 void MainWindow::initialize_side_menu_buttons() {
     ui->btn_clinic->setText(ui->btn_clinic->text() + " $" + QString::number(Clinic::cost));
     ui->btn_hospital->setText(ui->btn_hospital->text() + " $" + QString::number(Hospital::cost));
@@ -58,6 +75,12 @@ void MainWindow::initialize_side_menu_buttons() {
     // END OF YOUR IMPLEMENTATION
 }
 
+/**
+ * Initializes the styles and labels of all overlay buttons.
+ *
+ * Sets the label of the side menu buttons to have the corresponding costs.
+ * Sets the style of the side menu buttons to be in released style except for Navigate which has selected style.
+ */
 void MainWindow::initialize_overlay_buttons() {
     // START OF YOUR IMPLEMENTATION
     ui->btn_overlay_normal->setStyleSheet(BTN_SELECTED_STYLE);
@@ -67,6 +90,12 @@ void MainWindow::initialize_overlay_buttons() {
     // END OF YOUR IMPLEMENTATION
 }
 
+/**
+ * Destructor of the main window
+ *
+ * Stops the game loop.
+ * Deallocates UI, loop timer and the city.
+ */
 MainWindow::~MainWindow() {
     delete ui;
     loop_timer->stop();
@@ -74,22 +103,58 @@ MainWindow::~MainWindow() {
     delete city;
 }
 
+/**
+ * Gets the currently selected side menu button
+ *
+ * @return Selected side menu button (MainWindow::SideMenuButton)
+ */
 MainWindow::SideMenuButton MainWindow::get_selected_side_menu_button() {
     return selected_side_menu_button;
 }
 
+/**
+ * Gets the currently selected overlay button
+ *
+ * @return Selected overlay button (MainWindow::OverlayButton)
+ */
 MainWindow::OverlayButton MainWindow::get_selected_overlay_button() {
     return selected_overlay_button;
 }
 
+/**
+ * Gets the current side menu status
+ *
+ * Controls the animation of the side menu.
+ *
+ * @return Side menu status (MainWindow::SideMenuStatus)
+ */
 MainWindow::SideMenuStatus MainWindow::get_side_menu_status() {
     return side_menu_status;
 }
 
+/**
+ * Sets the current side menu status
+ *
+ * Controls the animation of the side menu.
+ *
+ * @param Side menu status (MainWindow::SideMenuStatus)
+ */
 void MainWindow::set_side_menu_status(SideMenuStatus status) {
     side_menu_status = status;
 }
 
+/**
+ * Centralized function that processes a click event of a side menu button.
+ *
+ * If the provided button is a building or a road,
+ * if the city has enough budget, it updates the data members and button styles so that the provided button is selected;
+ * otherwise, it updates the data members and button styles so that the Navigate button is selected.
+ *
+ * If the provided button is the Navigate or Remove button,
+ * it updates the data members and button styles so that the provided button is selected.
+ *
+ * @param button Clicked side menu button (MainWindow::SideMenuButton)
+ */
 void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
     // START OF YOUR IMPLEMENTATION
     switch(button){
@@ -267,6 +332,13 @@ void MainWindow::on_side_menu_button_clicked(SideMenuButton button) {
     // END OF YOUR IMPLEMENTATION
 }
 
+/**
+ * Centralized function that processes a click event of a side menu button.
+ *
+ * Updates the data members and button styles so that the provided button is selected.
+ *
+ * @param button Clicked overlay button (MainWindow::OverlayButton)
+ */
 void MainWindow::on_overlay_button_clicked(OverlayButton button) {
     // START OF YOUR IMPLEMENTATION
     //ui->btn_overlay_normal->setStyleSheet(BTN_RELEASED_STYLE);
@@ -302,8 +374,11 @@ void MainWindow::on_overlay_button_clicked(OverlayButton button) {
     // END OF YOUR IMPLEMENTATION
 }
 
-
-// This is called 50 times per second
+/** Main loop of the main window
+ *
+ * This main loop is called 50 times a second.
+ * It controls the animation of the side menu according to the side menu status of the main window.
+ */
 void MainWindow::main_loop() {
     switch (side_menu_status) {
         case SideMenuStatus::HIDDEN:
@@ -341,26 +416,56 @@ void MainWindow::main_loop() {
 }
 
 
-
+/**
+ * Function that handles the click event of the Next turn button.
+ *
+ * Calls the function that moves to the next turn in city.
+ */
 void MainWindow::on_btn_next_clicked(){
     city->move_to_next_turn();
 }
+
+/**
+ * Function (slot) that handles the click event of the Neighbor Overlay button.
+ *
+ * Updates the data members and calls the centralized function that handles the click event of overlay buttons.
+ */
 void MainWindow::on_btn_overlay_neighbor_clicked(){
     on_overlay_button_clicked(OverlayButton::NEIGHBOR);
     MainWindow::selected_overlay_button = OverlayButton::NEIGHBOR;
 }
+/**
+ * Function (slot) that handles the click event of the Normal Overlay button.
+ *
+ * Updates the data members and calls the centralized function that handles the click event of overlay buttons.
+ */
 void MainWindow::on_btn_overlay_normal_clicked(){
     on_overlay_button_clicked(OverlayButton::NORMAL);
     MainWindow::selected_overlay_button = OverlayButton::NORMAL;
 }
+/**
+ * Function (slot) that handles the click event of the Type Overlay button.
+ *
+ * Updates the data members and calls the centralized function that handles the click event of overlay buttons.
+ */
 void MainWindow::on_btn_overlay_type_clicked(){
     on_overlay_button_clicked(OverlayButton::TYPE);
     MainWindow::selected_overlay_button = OverlayButton::TYPE;
 }
+/**
+ * Function (slot) that handles the click event of the Road Overlay button.
+ *
+ * Updates the data members and calls the centralized function that handles the click event of overlay buttons.
+ */
 void MainWindow::on_btn_overlay_road_clicked(){
     on_overlay_button_clicked(OverlayButton::ROAD);
     MainWindow::selected_overlay_button = OverlayButton::ROAD;
 }
+/**
+ * Function (slot) that handles the click event of the Save button.
+ *
+ * Opens a file dialog and saves the city into the text file selected if the text file is valid.
+ */
 void MainWindow::on_btn_save_game_clicked(){
     QString filename = QFileDialog::getSaveFileName(this,tr("Save File"),"/home",tr("text files (*.txt)"));
     if(!filename.isEmpty()&& !filename.isNull()){
@@ -369,6 +474,11 @@ void MainWindow::on_btn_save_game_clicked(){
     }
 }
 
+/**
+ * Function (slot) that handles the click event of the each side menu button.
+ *
+ * Calls the centralized function that handles the click event of side menu buttons.
+ */
 void MainWindow::on_btn_apartment_clicked(){
     MainWindow::on_side_menu_button_clicked(SideMenuButton::APARTMENT);
 }

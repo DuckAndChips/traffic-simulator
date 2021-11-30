@@ -14,7 +14,7 @@ class Revenue: public Node {
 public:
     virtual Node::Category get_category() const override;
     virtual int get_working_population() const override;
-    virtual void set_working_population(int population);
+    virtual void set_working_population(int population) override;
 
 protected:
     explicit Revenue(City &city);
