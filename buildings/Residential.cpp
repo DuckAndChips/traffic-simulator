@@ -47,7 +47,7 @@ int Residential::get_population_growth() const {
     
     return std::min(
             city.get_population_growth_rate() * (number_neighboring_health_buildings() - number_neighboring_gold_mines()) / 10,
-            get_max_population() - population
+                static_cast<float>(get_max_population() - population)
     );
 }
 
