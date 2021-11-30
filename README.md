@@ -1,5 +1,8 @@
 ## Traffic Simulator
 
+#### Github Link
+https://github.com/DuckAndChips/traffic-simulator
+
 #### How to run the project
 Open `SimpleCity.pro` in Qt Creator and run it. The project is designed to work with Qt 5.15.1.
 
