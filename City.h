@@ -22,6 +22,14 @@
 #include <algorithm>
 using namespace std;
 
+/**
+ * City class
+ * 
+ * A class that contains all gaming mechanisms. This also integrates the gaming part, GUI, and the traffic simulator
+ * 
+ */
+
+
 class City {
     friend class Trip_Distribution;
     friend class Trip_Assignment;
@@ -97,7 +105,7 @@ public:
     inline void set_home_health_beta_1 (float beta)  {home_health_beta_1 = beta;}
     inline int  get_revenue() const {return revenue;}
     
-    /// God Mode: set the city's budget into newbud
+    /// God Mode: set the city's budget into newbud for demo purpose
     void set_budget(int newbud);
 
 private:
