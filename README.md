@@ -3,6 +3,21 @@
 #### How to run the project
 Open `SimpleCity.pro` in Qt Creator and run it.
 
+
+If you are using Qt version 5.12.11 (or older), `menuwindow.cpp` may not compile.    
+To fix this, change lines **26-28** of `menuwindow.cpp` from
+```c++
+QPixmap p = ui->label_logo->pixmap(Qt::ReturnByValue);
+const int SCALE = 4;
+ui->label_logo->setPixmap(p.scaled(p.width() * SCALE, p.height() * SCALE));
+```
+to
+```c++
+const QPixmap *p = ui->label_logo->pixmap();
+const int SCALE = 4;
+ui->label_logo->setPixmap(p->scaled(p->width() * SCALE, p->height() * SCALE));
+```
+
 #### Credit
 Modified from COMP2012H PA4 (Simple City), which original code and UI design are by COMP2012H Teaching Team.    
 Building icons / images by pixel32@opengameart.org ( https://opengameart.org/content/pixel-city-municipal-buildings ).    
