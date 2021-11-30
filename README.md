@@ -1,7 +1,7 @@
 ## Traffic Simulator
 
 #### How to run the project
-Open `SimpleCity.pro` in Qt Creator and run it.
+Open `SimpleCity.pro` in Qt Creator and run it. The project is designed to work with Qt 5.15.1.
 
 
 If you are using Qt version 5.12.11 (or older), `menuwindow.cpp` may not compile.    
