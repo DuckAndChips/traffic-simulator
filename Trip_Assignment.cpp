@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <cmath>
-#include <QDebug>
 using namespace std;
 
 
@@ -10,8 +9,7 @@ using namespace std;
  * The following set functions maybe move to city's class*/
 
 
-Trip_Assignment::Trip_Assignment(City &citi, std::vector<Road*> origins, std::vector<Road*> destinations, std::vector<std::vector<int>>& OD):
-        origin(origins),destination(destinations), OD_Matrix(OD), city(citi){}
+Trip_Assignment::Trip_Assignment(City &citi):city(citi){}
 
 void Trip_Assignment::set_Traffic_Model(std::vector<Road*> &origins, std::vector<Road*> &destinations, std::vector<std::vector<int>> &OD){
     this->origin = origins;
@@ -40,10 +38,6 @@ void Trip_Assignment::trip_assignment_main(){
 //            find_shortest_path(origin[i], destination[j], path);
 //            paths.push_back(path);
 //            // Model (1) end
-            //debug begin
-            for(int k=0; k<paths.size(); k++){
-                qDebug()<<paths[k].size();
-            }
             for(int k = 0; k < trips; k+= incremental_amount){
                 load_traffic(paths);
             }
@@ -171,15 +165,15 @@ double Trip_Assignment::get_travel_time(std::vector<Road*> &path){
 }
 
 bool Trip_Assignment::size_checking() const{
-    int origin_size = origin.size();
-    int destination_size = destination.size();
+    unsigned int origin_size = origin.size();
+    unsigned int destination_size = destination.size();
 
     /// check if the OD info are empty or not
     if(origin_size == 0 || destination_size == 0)    return true;
     if(origin_size != OD_Matrix.size()) return true;
 
     /// check the no of rows and columns matches with origin's size and destination's size or not
-    for(int i = 0; i<origin_size ; ++i){
+    for(unsigned int i = 0; i<origin_size ; ++i){
         if(OD_Matrix[i].size() != destination_size) return true;
     }
 

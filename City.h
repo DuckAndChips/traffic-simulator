@@ -50,7 +50,7 @@ public:
     int get_population() const;
     int get_max_population() const;
     int get_population_growth() const;
-    int get_population_growth_rate() const;
+    float get_population_growth_rate() const;
 
     /// Functions that set the three vector data member containing all buildings in specific catagories 
     void set_all_residential();
@@ -106,6 +106,8 @@ private:
     int budget;
     int turn;
     int revenue; 
+    int population_growth;
+    float population_growth_rate;
 
     vector<Residential*> all_residential_buildings;
     vector<Revenue*> all_revenue_buildings;

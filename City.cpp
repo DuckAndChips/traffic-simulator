@@ -3,7 +3,7 @@
 
 using namespace std;
 
-City::City(int size): grid_size(size), budget(200), turn(1) {
+City::City(int size): grid_size(size), budget(200), turn(1), revenue(0), population_growth(0),population_growth_rate(0.0f) {
     grid = new Node **[size];
     for (int x = 0; x < size; x++) {
         grid[x] = new Node *[size];
@@ -13,7 +13,7 @@ City::City(int size): grid_size(size), budget(200), turn(1) {
     }
 }
 
-City::City(const std::string &filename): grid_size(0), budget(200), turn(1) {
+City::City(const std::string &filename): grid_size(0), budget(200), turn(1), revenue(0), population_growth(0),population_growth_rate(0.0f) {
     ifstream input;
     input.open(filename);
 
@@ -184,26 +184,11 @@ int City::get_max_population() const {
 }
 
 int City::get_population_growth() const {
-    int population_change = 0;
-    for (int x = 0; x < grid_size; x++) {
-        for (int y = 0; y < grid_size; y++) {
-            if (grid[x][y] != nullptr) {
-                population_change += grid[x][y]->get_population_growth();
-            }
-        }
-    }
-    return population_change;
+   return population_growth;
 }
 
-int City::get_population_growth_rate() const {
-    int population_growth_rate = 0;
-    for (int x = 0; x < grid_size; x++) {
-        for (int y = 0; y < grid_size; y++) {
-            if (grid[x][y] != nullptr) {
-                population_growth_rate += grid[x][y]->get_population_growth_rate_contribution();
-            }
-        }
-    }
+float City::get_population_growth_rate() const {
+
     return population_growth_rate;
 }
 
@@ -288,6 +273,7 @@ bool City::construct_at(Node::Type type, const City::Coordinates &coordinates) {
             break;
         }
         case Node::Type::GOLD_MINE: {
+            building = new GoldMine{*this};
             break;
         }
         case Node::Type::HOUSE: {
@@ -413,10 +399,8 @@ void City::move_to_next_turn() {
         }
     }
 
-    /// Then, we creat a Trip_Assignment object with dummy refrence passed to it
-    std::vector<Road*> dummy_r;
-    std::vector<std::vector<int>> dummy_od;
-    Trip_Assignment trip_assignment(*this,dummy_r,dummy_r,dummy_od);
+
+
 
     /// Thirdly, we create 2 Trip_Distribution objects to handle home work trips and home health trips respectively
     /// If Trip_Distribution objects can done their works successfully, we call the Trip_Assignment object to assign traffic to
@@ -426,6 +410,7 @@ void City::move_to_next_turn() {
     set_all_residential();
     set_all_revenue();
 
+    Trip_Assignment trip_assignment(*this);
     Trip_Distribution home_work_trip(*this, all_residential_buildings, all_revenue_buildings, all_health_buildings);
     if(home_work_trip.trip_distribution_main(Node::Category::REVENUE)){
        trip_assignment.set_Traffic_Model(
@@ -472,23 +457,27 @@ void City::move_to_next_turn() {
         * population change = current population * population growth
         */
 
+    population_growth = 0;
+    population_growth_rate = 0.0f;
     for (unsigned int i = 0; i < all_residential_buildings.size(); ++i){
-        float growth_rate = 0.1f;
-        for(unsigned int j = 0; j < all_residential_buildings.size(); ++j){
+        float growth_rate = 0.0f;
+        for(unsigned int j = 0; j < all_health_buildings.size(); ++j){
             vector<Road*> path = home_health_trip.OD_path[i][j];
             if(!path.empty()){
                 float travel_time = trip_assignment.get_travel_time(path);
                 if(travel_time <= 10.5f)
-                    growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path));
+                    growth_rate += (0.1f+ (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path)));
                 else if(travel_time <= 11.0f)
                     growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
                 else if(travel_time <= 15.0f)
                     growth_rate += (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/100;
-                else growth_rate -= (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path));
-            }    
+                else growth_rate -= (home_health_trip.OD_matrix[i][j]/trip_assignment.get_travel_time(path))/10;
+            }
         }
         all_residential_buildings[i]->increase_population(all_residential_buildings[i]->get_population()*growth_rate);
+        population_growth += all_residential_buildings[i]->get_population()*growth_rate;
     }
+    if(get_population() != 0 ) population_growth_rate = static_cast<float>(population_growth) / get_population();
 
 
     /** original implementation of population change in PA3
@@ -522,7 +511,6 @@ void City::move_to_next_turn() {
     delete[] population_change;
     */
 }
-
 void City::set_budget(int newbud){
     if (newbud < 0){return;}
     budget = newbud;
@@ -566,4 +554,3 @@ void City::set_all_health(){
         }
     }
 }
-
