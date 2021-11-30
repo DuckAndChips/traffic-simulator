@@ -5,6 +5,10 @@
 #include "City.h"
 using namespace std;
 
+
+/***
+for trip distribution step (step 2), first, initiallize the 3 vectors containing all residential, revenue and health categories building respectively in the object
+***/
 Trip_Distribution::Trip_Distribution(City &city, std::vector<Residential*> & residential_buildings,
         std::vector<Revenue*> & revenue_buildings, std::vector<Health*> & health_buildings):
         all_residential_building(residential_buildings), all_revenue_building(revenue_buildings),
@@ -48,6 +52,20 @@ void Trip_Distribution::set_all_health(){
     }
 }
 
+/***
+After creating the object, this main funciton is called. 
+1. checking is done
+2. call the set_origin() fucntion to set the origin vector, 
+containing all road pointers pointed by all residential buidings. Each residential building corresponds to each road tile. 
+3. either:
+        3a. For home_work_trips, call set_work_destination() to set vector destination containing road pointers pointed by all revenue buildings
+        3b. For home_health_trips, call set_health_destination() to set vector destination containing road pointers pointed by all health buildings
+4. for each road tile in origin, generate the shortest path to road tile in each destination. Using the attrctiveness and shortest path, 
+compute the factor for each origin-destiantion pair and store to factor 2d matrix, as well as store shortest path road nodes for all origin-destiantion pair. 
+5. using the factor matrix and total number of trips for that origin to all destiantions in that category, 
+assign the number of trips for that origin-destiantion pair in OD_matrix 2d matrix.
+6. As the origin, destination and OD_matrix is passed by reference, and city is friend of Trip_Distribution, they can be used by other fucntions owned by city. 
+***/
 bool Trip_Distribution::trip_distribution_main(Node::Category category){
     /// No need for distribution and assignment
     if(all_residential_building.size() == 0 || category == Node::Category::RESIDENTIAL || category == Node::Category::ROAD)
@@ -55,13 +73,13 @@ bool Trip_Distribution::trip_distribution_main(Node::Category category){
 
     /// Error check: this function should not be called twice
     if(origin.size() != 0 || destination.size() != 0 || all_destination_building.size() != 0) return false;
-    set_origin();
+    set_origin(); // 2. origin vector is set here
     if(category == Node::Category::REVENUE){
-        if(all_revenue_building.size() == 0 ) return false; /// No need for distribution and assignment
-        set_work_destination();
+        if(all_revenue_building.size() == 0 ) return false; /// 3a. No need for distribution and assignment
+        set_work_destination(); //destination for home_work_trips is set here
     }else if(category == Node::Category::HEALTH){
-        if(all_health_building.size() == 0 ) return false; /// No need for distribution and assignment
-        set_health_destination();
+        if(all_health_building.size() == 0 ) return false; /// 3b. No need for distribution and assignment
+        set_health_destination(); //destination for home_health_trips is set here
     } else {return false;}
 
     /// Error check: check for size consistency
@@ -72,11 +90,14 @@ bool Trip_Distribution::trip_distribution_main(Node::Category category){
 
     /// Error check: this function should not be called twice
     if(!(factors.size() == 0 || OD_path.size() == 0 || OD_matrix.size() == 0)) return false;
-    set_factor_and_OD_path();
-    set_OD_matrix(category);
+    set_factor_and_OD_path(); // 5. factor and OD path(shortest distance between each origin and destination) is set here
+    set_OD_matrix(category); // 6. OD matrix containing number of trips from each origin to each destination is set here
     return true;
 }
 
+/***
+2. origin vector is set by iterating all residential buidnings in all_residential_buildings and push back their corrsponding road pointer to origin vector
+***/
 void Trip_Distribution::set_origin(){
     for(std::vector<Residential*>::iterator i = all_residential_building.begin(); i != all_residential_building.end(); i++){
         Residential* residential = *i;
@@ -97,6 +118,10 @@ void Trip_Distribution::set_origin(){
     }
 }
 
+/*** 
+3a. For home_work_trips, call set_work_destination() to set vector destination by iterating all revenue buildings in all_revenue_buildings and push back their corrsponding 
+road pointer to destination vector
+***/
 void Trip_Distribution::set_work_destination(){
     for(std::vector<Revenue*>::iterator i = all_revenue_building.begin(); i != all_revenue_building.end(); i++){
         Revenue* revenue = *i;
@@ -118,6 +143,11 @@ void Trip_Distribution::set_work_destination(){
     }
 }
 
+
+/*** 
+3b. For home_health_trips, call set_health_destination() to set vector destination by iterating all health buildings in all_health_buildings and push back their corrsponding 
+road pointer to destination vector
+***/
 void Trip_Distribution::set_health_destination(){
     for(std::vector<Health*>::iterator i = all_health_building.begin(); i != all_health_building.end(); ++i){
         Health* health = *i;
@@ -140,7 +170,10 @@ void Trip_Distribution::set_health_destination(){
     }
 }
 
-
+/***
+4. for each road tile in origin, generate the shortest path to road tile in each destination. Using the attrctiveness and shortest path, 
+compute the factor for each origin-destiantion pair and store to factor 2d matrix, as well as store shortest path road nodes for all origin-destiantion pair. 
+***/
 void Trip_Distribution::set_factor_and_OD_path(){
     for(unsigned int i=0; i<origin.size(); i++){
         /// Calculate factors using gravity model
@@ -175,11 +208,15 @@ void Trip_Distribution::set_factor_and_OD_path(){
     }
 }
 
+// overlaod fucntion when path is not needed for finding shortest path.
 int Trip_Distribution::find_shortest_path(Road* start_pt, Road* end_pt){
     std::vector<Road*> temp;
     return find_shortest_path(start_pt, end_pt, temp);
 }
 
+/*** 
+helper fucntion used by 
+***/
 int Trip_Distribution::find_shortest_path(Road* start_pt, Road* end_pt, std::vector<Road*>& path){
 
     /// handling path to make sure it contains the current road*
@@ -256,7 +293,10 @@ int Trip_Distribution::find_shortest_path(Road* start_pt, Road* end_pt, std::vec
     return path_dist;
 }
 
-
+/***
+5. using the factor matrix and total number of trips for that origin to all destiantions in that category, assign the number of trips for that origin-destiantion pair 
+in OD_matrix 2d matrix.
+***/
 void Trip_Distribution::set_OD_matrix(Node::Category category){
 
     for(unsigned int i = 0; i < factors.size(); ++i){
